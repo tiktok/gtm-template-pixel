@@ -1,0 +1,7 @@
+homepage: "https://www.tiktok.com"
+documentation: "https://github.com/tiktok/gtm-template-pixel"
+versions:
+   - sha: 7fb06ff8b0d246cf1619760aa9e4edfee6deba1b
+     changeNotes:
+      Version 0.1.16
+      Initial release, includes support for Standard and Enhanced Ecommerce.
