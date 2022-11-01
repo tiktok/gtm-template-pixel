@@ -281,7 +281,7 @@ Please refer to [TikTok documentation](https://ads.tiktok.com/marketing_api/docs
 
 2. Please do not edit any code in the template if you are not sure of what you are doing.
 
-3. If you have any Feature requests / Issues, please file a request in GitHub [here](https://github.com/tiktok-opensource/tiktok-pixel-client-gtm-template/issues).
+3. If you have any Feature requests / Issues, please file a request in GitHub [here](https://github.com/tiktok/gtm-template-pixel/issues).
 
 ### <a name="change"></a> 9. Change Logs
 
