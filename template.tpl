@@ -13,7 +13,7 @@ ___INFO___
   "id": "cvt_temp_public_id",
   "version": 1,
   "securityGroups": [],
-  "displayName": "TikTok Event Tag v0.1.16",
+  "displayName": "TikTok Event Tag v0.1.17",
   "categories": ["ADVERTISING","ANALYTICS"],
   "brand": {
     "id": "brand_dummy",
@@ -327,16 +327,16 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "SELECT",
         "name": "content_type",
-        "displayName": "Content Type",
+        "displayName": "content_type",
         "macrosInSelect": false,
         "selectItems": [
           {
-            "value": "product_group",
-            "displayValue": "product_group"
-          },
-          {
             "value": "product",
             "displayValue": "product"
+          },
+          {
+            "value": "product_group",
+            "displayValue": "product_group"
           }
         ],
         "simpleValueType": true,
@@ -347,7 +347,8 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ],
-        "help": "Optional: The content_type object property\u0027s value must be set to either product, or product_group, depending on how you will configure your data feed when you set up your product catalog. If you will be tracking events associated with individual products, set the value to product. If you are tracking events associated with product groups, set it to product_group instead."
+        "help": "Optional: The content_type object property\u0027s value must be set to either product, or product_group, depending on how you will configure your data feed when you set up your product catalog. If you will be tracking events associated with individual products, set the value to product. If you are tracking events associated with product groups, set it to product_group instead.",
+        "notSetText": ""
       },
       {
         "type": "TEXT",
@@ -511,7 +512,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
  * limitations under the License.
  */
 
-const version = "0_1_16";
+const version = "0_1_17";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
@@ -692,9 +693,12 @@ const main = () => {
       if (data.status) parameters.status = data.status;
     } else if (data.single_multi_product == "multiple") {
       // Multiple Content
-      // TODO: Need a way for JSON.parse to fail gracefully.
-      //       Unfortunately GTM Custom Templates don't support try-catch.
-      if (data.contents) parameters.contents = JSON.parse(data.contents);
+      if (data.contents) {
+        const parsedContents = JSON.parse(data.contents);
+        if (parsedContents !== undefined) {
+          parameters.contents = parsedContents;
+        }
+      }
       if (data.currency) parameters.currency = data.currency;
       if (data.value) parameters.value = makeNumber(data.value);
       if (data.description) parameters.description = data.description;
@@ -1019,7 +1023,7 @@ scenarios:
     \ 'abc123',\n};\nrunCode(mockData);\n\nassertThat(Calls['ttq.identify'].length).isStrictlyEqualTo(1);\n\
     assertThat(Calls['ttq.identify'][0].params).isEqualTo({\n  \"external_id\": \"\
     abc\"\n});\n\nassertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);\nassertThat(Calls['ttq.track'][0].params.gtm_version).isEqualTo(\"\
-    0_1_16\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
+    0_1_17\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
     product\");\nassertThat(Calls['ttq.track'][0].params.content_id).isEqualTo(\"\
     abc123\");\n\nassertApi('gtmOnSuccess').wasCalled();"
 - name: MissingPixelCode
@@ -1080,6 +1084,22 @@ scenarios:
     assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
     assertThat(Calls['ttq.track'][0].params.contents[0].content_id).isEqualTo("abc123");
     assertThat(Calls['ttq.track'][0].params.contents[0].price).isEqualTo(1.23);
+
+    // Verify that the tag finished successfully.
+    assertApi('gtmOnSuccess').wasCalled();
+- name: MultipleProductsInvalidContentsJSON
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      event_id: '1234',
+      pixel_code: 'my_pixel_code',
+      single_multi_product: 'multiple',
+      contents: '[{"content_id": "abc123", "price": 1.23}]]]]]',
+    };
+    runCode(mockData);
+
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.contents).isEqualTo(undefined);
 
     // Verify that the tag finished successfully.
     assertApi('gtmOnSuccess').wasCalled();
