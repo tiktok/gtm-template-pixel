@@ -13,8 +13,10 @@ The Google Tag Manager Client Side Template is created to speed up the set up of
 5. [Enable Enhanced / Standard Ecommerce Heavy-Lifting](#eecomm)
 6. [Enable Additional Parameters](#params)
 7. [Updating TikTok's GTM Client Side Template](#update)
-8. [Getting Support](#support)
-9. [Change Logs](#change)
+8. [Migrating from Events Builder](#migrate-events)
+9. [Migrating from Custom Code](#migrate-custom)
+10. [Getting Support](#support)
+11. [Change Logs](#change)
 
 ## Pre-requisites
 
@@ -271,7 +273,51 @@ Please refer to [TikTok documentation](https://ads.tiktok.com/marketing_api/docs
 
 5. Note: You will need to set up the Advanced Matching, Parameters all over again after the template change.
 
-### <a name="support"></a> 8. Support / Terms & Condition
+
+### <a name="migrate-events"></a> 8. Migration from Events Builder to use Google Tag Manager Template.
+
+> **NOTE** 
+> 
+> Read this only if you have implemented TikTok Pixel Events Builder in Google Tag Manager
+
+1. If you have already set up TikTok Pixel Events Builder in Google Tag Manager, you should already have the [base code installed in Google Tag Manager](#install) while having triggers set up via css selector or URL in TikTok Events Manager.
+
+	**WARNING: Migrating from TikTok Pixel Events Builder to use our Google Tag Manager Template means you are completely switching to TikTok Pixel Custom Code.**
+
+3. Ensure that you have the template installed in your Google Tag Manager in [Step 1](#download).
+
+4. Follow through [Step 3](#create-tag) to [Step 6](#params) to create Event Tags and set up parameters, advanced matching, etc. 
+
+	**TIP: There is no need to create a new pixel, you may use your existing pixel**
+	
+5. Delete the Events Builder in TikTok Ads Manager as a best practice to prevent duplicate of events.
+
+   ![](https://elegant-circle-342708.as.r.appspot.com/static/img/migrate_events_builder.png)
+
+6. Save, preview and publish your events.
+
+
+
+### <a name="migrate-custom"></a> 9. Migrate from Custom Code to use Google Tag Manger Template
+
+> **NOTE**
+> 
+> Read this only if you have implemented TikTok Pixel Custom Code via Google Tag Manager Custom HTML Tag.
+
+
+1. Make sure you have followed [Step 1](#download) to download our Google Tag Manager Template.
+
+
+2. If you have already installed TikTok Pixel Custom Code in your Google Tag Manager Custom HTML tag, simply click on the edit button after opening up your Custom HTML tag.
+
+   ![](https://elegant-circle-342708.as.r.appspot.com/static/img/migrate_custom_code.png)
+
+3. Replace your Custom HTML tag with the installed template and follow through [Step 3](#create-tag) to [Step 6](#params) to set up parameters, advanced matching, etc.
+
+4. Save, preview and publish your events.
+
+
+### <a name="support"></a> 10. Support / Terms & Condition
 
 > **WARNING**
 >
@@ -283,7 +329,7 @@ Please refer to [TikTok documentation](https://ads.tiktok.com/marketing_api/docs
 
 3. If you have any Feature requests / Issues, please file a request in GitHub [here](https://github.com/tiktok/gtm-template-pixel/issues).
 
-### <a name="change"></a> 9. Change Logs
+### <a name="change"></a> 11. Change Logs
 
 - V0.1.14
   - Initial Release
