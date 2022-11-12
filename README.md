@@ -274,7 +274,7 @@ Please refer to [TikTok documentation](https://ads.tiktok.com/marketing_api/docs
 5. Note: You will need to set up the Advanced Matching, Parameters all over again after the template change.
 
 
-### <a name="migrate-events"></a> 8. Migration from Events Builder to use Google Tag Manager Template.
+### <a name="migrate-events"></a> 8. Migrate from Events Builder to Google Tag Manager Template.
 
 > **NOTE** 
 > 
@@ -298,7 +298,7 @@ Please refer to [TikTok documentation](https://ads.tiktok.com/marketing_api/docs
 
 
 
-### <a name="migrate-custom"></a> 9. Migrate from Custom Code to use Google Tag Manger Template
+### <a name="migrate-custom"></a> 9. Migrate from Custom Code to Google Tag Manger Template
 
 > **NOTE**
 > 
