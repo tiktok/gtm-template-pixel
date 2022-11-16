@@ -13,7 +13,7 @@ ___INFO___
   "id": "cvt_temp_public_id",
   "version": 1,
   "securityGroups": [],
-  "displayName": "TikTok Event Tag v0.1.17",
+  "displayName": "TikTok Pixel",
   "categories": ["ADVERTISING","ANALYTICS"],
   "brand": {
     "id": "brand_dummy",
