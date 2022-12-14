@@ -1,6 +1,10 @@
 homepage: "https://www.tiktok.com"
 documentation: "https://github.com/tiktok/gtm-template-pixel"
 versions:
+   - sha: 45f63e1a80c640547c45f6a93d5ec0c832224698
+     changeNotes:
+      Version 0.1.18
+      Pass through contents.
    - sha: 2fdc03a9a66c87f31bbf03cbb74f9750f3116f41
      changeNotes:
       Update description.
