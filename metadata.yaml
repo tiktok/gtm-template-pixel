@@ -1,6 +1,10 @@
-homepage: "https://www.tiktok.com"
-documentation: "https://github.com/tiktok/gtm-template-pixel"
+homepage: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
+documentation: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 versions:
+   - sha: 79ef3f657fbdb0edf4e6bfa1419a28e62d4c34d0
+     changeNotes:
+      Version 0.1.19
+      Add brand, category, and config hash.
    - sha: 45f63e1a80c640547c45f6a93d5ec0c832224698
      changeNotes:
       Version 0.1.18
