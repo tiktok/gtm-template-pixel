@@ -6,7 +6,7 @@ The Google Tag Manager Client Side Template is created to speed up the set up of
 
 ## Table of Contents
 
-1. [Downloading TikTok's GTM Client Side Template](#download)
+1. [Install the TikTok GTM Client Side Template](#download)
 2. [Installing TikTok Pixel Base Code](#install)
 3. [Creating TikTok Event Tags](#create-tag)
 4. [Enable Advanced Matching](#am)
@@ -30,31 +30,9 @@ The Google Tag Manager Client Side Template is created to speed up the set up of
 - Variables
 - Templates
 
-### <a name="download"></a> 1. Downloading the TikTok's GTM Client Side Template
+### <a name="download"></a> 1. Install the TikTok GTM Client Side Template
 
-> **NOTE: We are not in Google Tag Manager Gallery yet!**
->
-> We are currently getting our template listed in [Google Tag Manager Template Gallery](https://tagmanager.google.com/gallery/#/) hence the installation is still via manual download of the template from GitHub.
-
-1. Download the repository by clicking on the green colour **Code button > Download ZIP** above.
-
-   ![](https://elegant-circle-342708.as.r.appspot.com/static/img/0-download_1.png)
-
-2. Unzip the downloaded folder and you will only be using **template.tpl** from the folder.
-
-   ![](https://elegant-circle-342708.as.r.appspot.com/static/img/0-download_2.png)
-
-3. From your **Google Tag Manager Workspace** > Select **Templates** > Click on **New** under **Tag Templates**
-
-   ![](https://elegant-circle-342708.as.r.appspot.com/static/img/0-download_3.png)
-
-4. In the **New Template Editor** > Select the **3-dotted Menu** from the top right corner > **Import** the downloaded template.tpl
-
-   ![](https://elegant-circle-342708.as.r.appspot.com/static/img/0-download_4.png)
-
-5. Finally, you should see the template loaded. Then, click on **Save** and proceed the next step.
-
-   ![](https://elegant-circle-342708.as.r.appspot.com/static/img/0-download_5.png)
+You can find our template in the [Google Tag Manager Template Gallery](https://tagmanager.google.com/gallery/#/owners/tiktok/templates/gtm-template-pixel). Click "Add to workspace" to install it into your workspace.
 
 ### <a name="install"></a> 2. Installing TikTok Pixel Base Code
 
@@ -255,11 +233,7 @@ Please refer to [TikTok documentation](https://ads.tiktok.com/marketing_api/docs
 
 ### <a name="update"></a> 7. Updating TikTok's GTM Client Side Template
 
-> **NOTE: We are not in Google Tag Manager Gallery yet!**
->
-> Updates currently require you to manually download the template again and change your tags manually. We are currently geting our template listed in [Google Tag Manager Template Gallery](https://tagmanager.google.com/gallery/#/) and we apologize for the inconvenience caused.
-
-1. Follow through Step 1 to 4 of the [Downloading the TikTok's GTM Client Side Template](#download)
+1. Follow the steps to [Install the TikTok GTM Client Side Template](#download)
 
 2. You should see a new template appearing on yout Templates list.
 
@@ -305,7 +279,7 @@ Please refer to [TikTok documentation](https://ads.tiktok.com/marketing_api/docs
 > Read this only if you have implemented TikTok Pixel Custom Code via Google Tag Manager Custom HTML Tag.
 
 
-1. Make sure you have followed [Step 1](#download) to download our Google Tag Manager Template.
+1. Make sure you have followed [Step 1](#download) to install our Google Tag Manager Template.
 
 
 2. If you have already installed TikTok Pixel Custom Code in your Google Tag Manager Custom HTML tag, simply click on the edit button after opening up your Custom HTML tag.

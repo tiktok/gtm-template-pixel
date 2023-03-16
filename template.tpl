@@ -437,6 +437,20 @@ ___TEMPLATE_PARAMETERS___
       },
       {
         "type": "TEXT",
+        "name": "brand",
+        "displayName": "brand",
+        "simpleValueType": true,
+        "help": "Optional: Brand name of the product",
+        "enablingConditions": [
+          {
+            "paramName": "enhance_ecomm",
+            "paramValue": false,
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "TEXT",
         "name": "description",
         "displayName": "description",
         "simpleValueType": true,
@@ -515,7 +529,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
  * limitations under the License.
  */
 
-const version = "0_1_18";
+const version = "0_1_19";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
@@ -548,14 +562,36 @@ const checkExistence = (key) => {
 };
 
 const looksLikeSHA256 = (s) => {
-  // SHA256 digest is 256 bits == 64 bytes == 64 chars.
   return s && s.length == 64;
+};
+
+const getConfigHash = (data) => {
+  var email = 0;
+  if (data.email) email += 1;
+  else if (data.sha256_email) email += 2;
+
+  var phone = 0;
+  if (data.phone) phone += 1;
+  else if (data.sha256_phone) phone += 2;
+
+  var external_id = 0;
+  if (data.external_id) external_id += 1;
+  else if (data.sha256_external_id) external_id += 2;
+
+  var contents = 0;
+  if (data.enhance_ecomm == false && data.single_multi_product == "empty") contents = 1;
+  else if (data.enhance_ecomm == false && data.single_multi_product == "single") contents = 2;
+  else if (data.enhance_ecomm == false && data.single_multi_product == "multiple") contents = 3;
+  else if (data.enhance_ecomm == true && data.ga_ecomm == "enhance_ecomm") contents = 4;
+  else if (data.enhance_ecomm == true && data.ga_ecomm == "ecomm") contents = 5;
+
+  return '' + email + phone + external_id + contents;
 };
 
 const main = () => {
   // Forming the passed in parameters
   var parameters = {
-    gtm_version: version,
+    gtm_version: version + ':' + getConfigHash(data),
   };
 
   // Check if enhance ecomm is enabled.
@@ -579,6 +615,8 @@ const main = () => {
           if (ed.item_id) content.content_id = ed.item_id;
           if (!ed.item_id && ed.id) content.content_id = ed.id;
           if (ed.item_name) content.content_name = ed.item_name;
+          if (ed.item_brand) content.brand = ed.item_brand;
+          if (ed.item_category) content.content_category = ed.item_category;
           if (ed.price) content.price = ed.price;
           if (ed.quantity) content.quantity = ed.quantity;
           content.content_type = "product";
@@ -634,6 +672,8 @@ const main = () => {
           var content = {};
           if (ed.id) content.content_id = ed.id;
           if (ed.name) content.content_name = ed.name;
+          if (ed.brand) content.brand = ed.brand;
+          if (ed.category) content.content_category = ed.category;
           if (ed.price) content.price = makeNumber(ed.price);
           if (ed.quantity) content.quantity = makeNumber(ed.quantity);
           content.content_type = "product";
@@ -1028,7 +1068,7 @@ scenarios:
     \ 'abc123',\n};\nrunCode(mockData);\n\nassertThat(Calls['ttq.identify'].length).isStrictlyEqualTo(1);\n\
     assertThat(Calls['ttq.identify'][0].params).isEqualTo({\n  \"external_id\": \"\
     abc\"\n});\n\nassertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);\nassertThat(Calls['ttq.track'][0].params.gtm_version).isEqualTo(\"\
-    0_1_17\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
+    0_1_19:0010\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
     product\");\nassertThat(Calls['ttq.track'][0].params.content_id).isEqualTo(\"\
     abc123\");\n\nassertApi('gtmOnSuccess').wasCalled();"
 - name: MissingPixelCode
@@ -1104,7 +1144,8 @@ scenarios:
     runCode(mockData);
 
     assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
-    assertThat(Calls['ttq.track'][0].params.contents).isEqualTo(undefined);
+    // Parsing failure should just forward the event to Pixel.
+    assertThat(Calls['ttq.track'][0].params.contents).isEqualTo('[{"content_id": "abc123", "price": 1.23}]]]]]');
 
     // Verify that the tag finished successfully.
     assertApi('gtmOnSuccess').wasCalled();
