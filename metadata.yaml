@@ -1,6 +1,10 @@
 homepage: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 documentation: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 versions:
+   - sha: 4ed8cbc2e957c7a9dd702d82045b21391351a3a9
+     changeNotes:
+      Version 0.1.20
+      Improve integration with Enhanced and Standard Ecommerce, UI fixes
    - sha: 79ef3f657fbdb0edf4e6bfa1419a28e62d4c34d0
      changeNotes:
       Version 0.1.19
