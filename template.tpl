@@ -59,36 +59,28 @@ ___TEMPLATE_PARAMETERS___
         "macrosInSelect": true,
         "selectItems": [
           {
-            "value": "ViewContent",
-            "displayValue": "ViewContent"
-          },
-          {
-            "value": "ClickButton",
-            "displayValue": "ClickButton"
-          },
-          {
-            "value": "Search",
-            "displayValue": "Search"
-          },
-          {
-            "value": "AddToWishlist",
-            "displayValue": "AddToWishlist"
+            "value": "CompletePayment",
+            "displayValue": "CompletePayment"
           },
           {
             "value": "AddToCart",
             "displayValue": "AddToCart"
           },
           {
+            "value": "ViewContent",
+            "displayValue": "ViewContent"
+          },
+          {
             "value": "InitiateCheckout",
             "displayValue": "InitiateCheckout"
           },
           {
-            "value": "AddPaymentInfo",
-            "displayValue": "AddPaymentInfo"
+            "value": "AddToWishlist",
+            "displayValue": "AddToWishlist"
           },
           {
-            "value": "CompletePayment",
-            "displayValue": "CompletePayment"
+            "value": "AddPaymentInfo",
+            "displayValue": "AddPaymentInfo"
           },
           {
             "value": "PlaceAnOrder",
@@ -113,6 +105,14 @@ ___TEMPLATE_PARAMETERS___
           {
             "value": "Subscribe",
             "displayValue": "Subscribe"
+          },
+          {
+            "value": "ClickButton",
+            "displayValue": "ClickButton"
+          },
+          {
+            "value": "Search",
+            "displayValue": "Search"
           }
         ],
         "simpleValueType": true,
@@ -243,9 +243,9 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "CHECKBOX",
         "name": "enhance_ecomm",
-        "checkboxText": "Use Google Analytics E-commerce Data Layers",
+        "checkboxText": "Use Google Analytics E-commerce Data Layers (Recommended)",
         "simpleValueType": true,
-        "help": "If you have Google\u0027s \u003ca href\u003d\"https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type\u003dgtm#implementation\"\u003eEnhanced E-Commerce\u003c/a\u003e or \u003ca href\u003d\"https://support.google.com/tagmanager/answer/6107169?hl\u003den#standard-ecommerce\"\u003e Standard E-Commerce (Deprecated)\u003c/a\u003e Data Layers set up to collect information about the shopping behavior of your users. TikTok will automatically collect these data as parameters to help you improve your ad performance."
+        "help": "If you have Google\u0027s \u003ca href\u003d\"https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type\u003dgtm#implementation\"\u003eEnhanced E-Commerce\u003c/a\u003e or \u003ca href\u003d\"https://support.google.com/tagmanager/answer/6107169?hl\u003den#standard-ecommerce\"\u003e Standard E-Commerce\u003c/a\u003e Data Layers set up to collect information about the shopping behavior of your users. TikTok will automatically collect these data as parameters to help you improve your ad performance."
       },
       {
         "type": "RADIO",
@@ -325,7 +325,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ],
-        "help": "Optional: ID of the product item"
+        "help": "Recommended: Unique ID of the item, either SKU ID or item group ID"
       },
       {
         "type": "SELECT",
@@ -350,7 +350,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ],
-        "help": "Optional: The content_type object property\u0027s value must be set to either product, or product_group, depending on how you will configure your data feed when you set up your product catalog. If you will be tracking events associated with individual products, set the value to product. If you are tracking events associated with product groups, set it to product_group instead.",
+        "help": "Recommended: Select \"product\" if your content_id is SKU ID, or select \"product_group\" if your content_id is item group ID",
         "notSetText": ""
       },
       {
@@ -362,6 +362,49 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "single_multi_product",
             "paramValue": "single",
+            "type": "EQUALS"
+          }
+        ],
+        "help": "Recommended: Title of your product or page"
+      },
+      {
+        "type": "TEXT",
+        "name": "content_category",
+        "displayName": "content_category",
+        "simpleValueType": true,
+        "help": "Recommended: Category of the product or page",
+        "enablingConditions": [
+          {
+            "paramName": "single_multi_product",
+            "paramValue": "single",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "TEXT",
+        "name": "description",
+        "displayName": "description",
+        "simpleValueType": true,
+        "help": "Recommended: Description of the product or page",
+        "enablingConditions": [
+          {
+            "paramName": "enhance_ecomm",
+            "paramValue": false,
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "TEXT",
+        "name": "brand",
+        "displayName": "brand",
+        "simpleValueType": true,
+        "help": "Recommended: Brand name of the product",
+        "enablingConditions": [
+          {
+            "paramName": "enhance_ecomm",
+            "paramValue": false,
             "type": "EQUALS"
           }
         ]
@@ -378,7 +421,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ],
-        "help": "Optional: Price of item"
+        "help": "Recommended: Price of this item"
       },
       {
         "type": "TEXT",
@@ -391,7 +434,8 @@ ___TEMPLATE_PARAMETERS___
             "paramValue": "single",
             "type": "EQUALS"
           }
-        ]
+        ],
+        "help": "Recommended: Quantity of this item"
       },
       {
         "type": "TEXT",
@@ -405,7 +449,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ],
-        "help": "Optional: ISO 4217 code. Examples: \"EUR\", \"USD\", \"JPY\". See \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\"\u003ehere \u003c/a\u003efor a list of currencies supported."
+        "help": "Recommended: ISO 4217 code. Examples: \"EUR\", \"USD\", \"JPY\". See \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\"\u003ehere \u003c/a\u003efor a list of currencies supported."
       },
       {
         "type": "TEXT",
@@ -419,56 +463,14 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ],
-        "help": "Optional: Value of the order"
-      },
-      {
-        "type": "TEXT",
-        "name": "content_category",
-        "displayName": "content_category",
-        "simpleValueType": true,
-        "help": "Optional: Category of the page/product",
-        "enablingConditions": [
-          {
-            "paramName": "single_multi_product",
-            "paramValue": "single",
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "brand",
-        "displayName": "brand",
-        "simpleValueType": true,
-        "help": "Optional: Brand name of the product",
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "description",
-        "displayName": "description",
-        "simpleValueType": true,
-        "help": "Optional: A string description of the web event",
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ]
+        "help": "Recommended: Total value of the order"
       },
       {
         "type": "TEXT",
         "name": "query",
         "displayName": "query",
         "simpleValueType": true,
-        "help": "Optional: The text string that was searched for. For instance, a person searches for a product on your website, you can forward the keyword being searched here.",
+        "help": "Recommended for Search events: The text string that was searched for. For instance, a person searches for a product on your website, you can forward the keyword being searched here.",
         "enablingConditions": [
           {
             "paramName": "enhance_ecomm",
@@ -529,16 +531,17 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
  * limitations under the License.
  */
 
-const version = "0_1_19";
+const version = "0_1_20";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
 const copyFromDataLayer = require("copyFromDataLayer");
-const ecommerce = copyFromDataLayer("ecommerce");
 const makeNumber = require("makeNumber");
 const callInWindow = require("callInWindow");
 const Object = require("Object");
 const JSON = require("JSON");
+
+const ecommerce = copyFromDataLayer("ecommerce");
 
 const ValidEvents = {
   ViewContent: 1,
@@ -588,6 +591,147 @@ const getConfigHash = (data) => {
   return '' + email + phone + external_id + contents;
 };
 
+const getEnhancedEcommerceData = (data, ecommerce) => {
+  if (!ecommerce) {
+    return null;
+  }
+
+  if (data.event == "ViewContent" && ecommerce.detail && ecommerce.detail.products) {
+    return ecommerce.detail.products;
+  } else if (data.event == "AddToCart" && ecommerce.add && ecommerce.add.products) {
+    return ecommerce.add.products;
+  } else if ((data.event == "InitiateCheckout" || data.event == "AddPaymentInfo") && ecommerce.checkout && ecommerce.checkout.products) {
+    return ecommerce.checkout.products;
+  } else if ((data.event == "CompletePayment" || data.event == "PlaceAnOrder" || data.event == "Subscribe") && ecommerce.purchase && ecommerce.purchase.products) {
+    return ecommerce.purchase.products;
+  } else {
+    if (ecommerce.detail && ecommerce.detail.products)
+      return ecommerce.detail.products;
+    if (ecommerce.add && ecommerce.add.products)
+      return ecommerce.add.products;
+    if (ecommerce.checkout && ecommerce.checkout.products)
+      return ecommerce.checkout.products;
+    if (ecommerce.purchase && ecommerce.purchase.products)
+      return ecommerce.purchase.products;
+  }
+  return null;
+};
+
+const getItemCategories = (item) => {
+  var categories = [];
+  if (item.item_category) categories.push(item.item_category);
+  if (item.item_category2) categories.push(item.item_category2);
+  if (item.item_category3) categories.push(item.item_category3);
+  if (item.item_category4) categories.push(item.item_category4);
+  if (item.item_category5) categories.push(item.item_category5);
+
+  if (categories.length > 0) {
+    return categories.join(',');
+  }
+
+  return null;
+};
+
+const getEcommerceData = (data, ecommerce) => {
+  var value = 0;
+  var currency = "USD"; // default value
+  var contents = [];
+
+  /*
+    Standard Ecommerce Support. For more details on Ecommerce Data Structure
+    https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type=gtm
+    We will need to check for standard ecommerce events if Enhanced Ecommerce doesnt work
+  */
+  if (ecommerce && ecommerce.items) {
+    log("1a. Standard Ecommerce - Data layers detected");
+    ecommerce.items.map(function (ed) {
+      // Form the TikTok Parameter Object
+      var content = {};
+      if (ed.item_id) content.content_id = ed.item_id;
+      if (!ed.item_id && ed.id) content.content_id = ed.id;
+      if (ed.item_name) content.content_name = ed.item_name;
+      if (ed.item_brand) content.brand = ed.item_brand;
+      var categoryString = getItemCategories(ed);
+      if (categoryString) content.content_category = categoryString;
+      if (ed.price) content.price = makeNumber(ed.price);
+      if (ed.quantity) {
+        content.quantity = makeNumber(ed.quantity);
+      } else {
+        content.quantity = 1;
+      }
+      content.content_type = "product";
+      contents.push(content);
+      // Calulate the total value shown
+      if (ed.price) {
+        if (!ed.quantity) ed.quantity = 1;
+        value += ed.price * ed.quantity;
+      }
+    });
+  } else if (data.ga_ecomm == "ecomm") {
+    log("1a. Standard Ecommerce - Unable to detect any Data Layers");
+  }
+
+  /*
+    Enhanced Ecommerce Support. Fore more details on Enhanced Ecommerce Data Structure
+    https://developers.google.com/analytics/devguides/collection/ua/gtm/enhanced-ecommerce#details
+    ViewContent = detail
+    AddToCart = add
+    InitiateCheckout, AddPaymentInfo = checkout
+    CompletePayment, PlaceAnOrder, Subscribe = purchase
+  */
+  const eecData = getEnhancedEcommerceData(data, ecommerce);
+  if (eecData !== null && contents.length == 0) {
+    log("1b. Enhanced Ecommerce - Data layers detected");
+    eecData.map(function (ed) {
+      // Form the TikTok Parameter Object
+      var content = {};
+      if (ed.id) content.content_id = ed.id;
+      if (ed.name) content.content_name = ed.name;
+      if (ed.brand) content.brand = ed.brand;
+      if (ed.category) content.content_category = ed.category;
+      if (ed.price) content.price = makeNumber(ed.price);
+      if (ed.quantity) {
+        content.quantity = makeNumber(ed.quantity);
+      } else {
+        content.quantity = 1;
+      }
+      content.content_type = "product";
+      contents.push(content);
+      // Calulate the total value shown
+      if (ed.price) {
+        if (!ed.quantity) ed.quantity = 1;
+        value += ed.price * ed.quantity;
+      }
+    });
+  } else if (data.ga_ecomm == "enhance_ecomm") {
+    log("1b. Enhanced Ecommerce - Unable to detect any ecommerce data layers");
+  }
+
+  if (ecommerce) {
+    if (ecommerce.currencyCode) {
+      currency = ecommerce.currencyCode;
+    } else if (ecommerce.currency) {
+      currency = ecommerce.currency;
+    }
+
+    if (ecommerce.value) {
+      value = ecommerce.value;
+    } else if (
+      ecommerce.purchase &&
+      ecommerce.purchase.actionField &&
+      ecommerce.purchase.actionField.revenue
+    ) {
+      value = ecommerce.purchase.actionField.revenue;
+    }
+  }
+
+  return {
+    value: value,
+    currency: currency,
+    contents: contents
+  };
+};
+
 const main = () => {
   // Forming the passed in parameters
   var parameters = {
@@ -596,122 +740,11 @@ const main = () => {
 
   // Check if enhance ecomm is enabled.
   if (data.enhance_ecomm == true) {
-    // TikTok only supports enhance ecomm via datalayer https://developers.google.com/analytics/devguides/collection/ua/gtm/enhanced-ecommerce#purchases
-
-    var totalValue = 0;
-
-    if (data.ga_ecomm == "ecomm") {
-      /*
-        Standard Ecommerce Support. For more details on Ecommerce Data Structure
-        https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type=gtm
-        We will need to check for standard ecommerce events if Enhanced Ecommerce doesnt work
-      */
-      if (ecommerce.items) {
-        log("1a. Standard Ecommerce - Data layers detected");
-        parameters.contents = [];
-        ecommerce.items.map(function (ed) {
-          // Form the TikTok Parameter Object
-          var content = {};
-          if (ed.item_id) content.content_id = ed.item_id;
-          if (!ed.item_id && ed.id) content.content_id = ed.id;
-          if (ed.item_name) content.content_name = ed.item_name;
-          if (ed.item_brand) content.brand = ed.item_brand;
-          if (ed.item_category) content.content_category = ed.item_category;
-          if (ed.price) content.price = ed.price;
-          if (ed.quantity) content.quantity = ed.quantity;
-          content.content_type = "product";
-          parameters.contents.push(content);
-          // Calulate the total value shown
-          if (ed.price) {
-            if (!ed.quantity) ed.quantity = 1;
-            totalValue += ed.price * ed.quantity;
-          }
-        });
-      } else {
-        log("1a. Standard Ecommerce - Unable to detect any Data Layers");
-      }
-    }
-
-    if (data.ga_ecomm == "enhance_ecomm") {
-      /*
-        Enhanced Ecommerce Support. Fore more details on Enhanced Ecommerce Data Structure
-        https://developers.google.com/analytics/devguides/collection/ua/gtm/enhanced-ecommerce#details
-        ViewContent = detail
-        AddToCart = add
-        InitiateCheckout, AddPaymentInfo = checkout
-        CompletePayment, PlaceAnOrder, Subscribe = purchase
-      */
-
-      var eecData = "";
-      if (data.event == "ViewContent") {
-        if (ecommerce.detail && ecommerce.detail.products)
-          eecData = ecommerce.detail.products;
-      } else if (data.event == "AddToCart") {
-        if (ecommerce.add && ecommerce.add.products)
-          eecData = ecommerce.add.products;
-      } else if (
-        data.event == "InitiateCheckout" ||
-        data.event == "AddPaymentInfo"
-      ) {
-        if (ecommerce.checkout && ecommerce.checkout.products)
-          eecData = ecommerce.checkout.products;
-      } else if (
-        data.event == "CompletePayment" ||
-        data.event == "PlaceAnOrder" ||
-        data.event == "Subscribe"
-      ) {
-        if (ecommerce.purchase && ecommerce.purchase.products)
-          eecData = ecommerce.purchase.products;
-      }
-
-      if (eecData.length > 0) {
-        log("1b. Enhanced Ecommerce - Data layers detected");
-        parameters.contents = [];
-        eecData.map(function (ed) {
-          // Form the TikTok Parameter Object
-          var content = {};
-          if (ed.id) content.content_id = ed.id;
-          if (ed.name) content.content_name = ed.name;
-          if (ed.brand) content.brand = ed.brand;
-          if (ed.category) content.content_category = ed.category;
-          if (ed.price) content.price = makeNumber(ed.price);
-          if (ed.quantity) content.quantity = makeNumber(ed.quantity);
-          content.content_type = "product";
-          parameters.contents.push(content);
-          // Calulate the total value shown
-          if (ed.price) {
-            if (!ed.quantity) ed.quantity = 1;
-            totalValue += ed.price * ed.quantity;
-          }
-        });
-      } else {
-        log(
-          "1b. Enhanced Ecommerce - Unable to detect any ecommerce data layers"
-        );
-      }
-    }
-
-    // ROAS parameters
-    // All except ViewContent will have value and currency if there are items in the parameters
-    if (
-      data.event != "ViewContent" &&
-      parameters.contents &&
-      parameters.contents.length > 0
-    ) {
-      // Get the currency from the ecommerce data layer, else the default is USD.
-      parameters.currency = "USD"; // Default is USD.
-      if (ecommerce.currencyCode) parameters.currency = ecommerce.currencyCode;
-      if (!ecommerce.currencyCode && ecommerce.currency)
-        parameters.currency = ecommerce.currency;
-      // Get the value from the ecommerce purchase action else, calculate everything in the tag.
-      parameters.value = totalValue;
-      if (
-        ecommerce.purchase &&
-        ecommerce.purchase.actionField &&
-        ecommerce.purchase.actionField.revenue
-      ) {
-        parameters.value = ecommerce.purchase.actionField.revenue;
-      }
+    const ecomData = getEcommerceData(data, ecommerce);
+    parameters.currency = ecomData.currency;
+    parameters.value = ecomData.value;
+    if (ecomData.contents && ecomData.contents.length > 0) {
+      parameters.contents = ecomData.contents;
     }
   } else {
     if (data.single_multi_product == "single") {
@@ -1068,7 +1101,7 @@ scenarios:
     \ 'abc123',\n};\nrunCode(mockData);\n\nassertThat(Calls['ttq.identify'].length).isStrictlyEqualTo(1);\n\
     assertThat(Calls['ttq.identify'][0].params).isEqualTo({\n  \"external_id\": \"\
     abc\"\n});\n\nassertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);\nassertThat(Calls['ttq.track'][0].params.gtm_version).isEqualTo(\"\
-    0_1_19:0010\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
+    0_1_20:0010\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
     product\");\nassertThat(Calls['ttq.track'][0].params.content_id).isEqualTo(\"\
     abc123\");\n\nassertApi('gtmOnSuccess').wasCalled();"
 - name: MissingPixelCode
@@ -1176,6 +1209,81 @@ scenarios:
 
     // Verify that the tag finished successfully.
     assertApi('gtmOnSuccess').wasCalled();
+- name: StandardEcommerce
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: true,
+      ecommerce: {
+        currency: 'CAD',
+        value: 7.77,
+        items: [
+          {
+              item_id: 'abc123',
+              item_name: 'tee shirt',
+              item_brand: 'mybrand',
+              item_category: "Apparel",
+              item_category2: "Adult",
+              item_category4: "Crew",
+              price: 9.99,
+              discount: 2.22,
+              quantity: 1
+          }
+        ]
+      }
+    };
+
+    runCode(mockData);
+
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.contents.length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.contents[0].content_id).isEqualTo("abc123");
+    assertThat(Calls['ttq.track'][0].params.contents[0].content_type).isEqualTo("product");
+    assertThat(Calls['ttq.track'][0].params.contents[0].content_name).isEqualTo("tee shirt");
+    assertThat(Calls['ttq.track'][0].params.contents[0].content_category).isEqualTo("Apparel,Adult,Crew");
+    assertThat(Calls['ttq.track'][0].params.contents[0].brand).isEqualTo("mybrand");
+    assertThat(Calls['ttq.track'][0].params.contents[0].price).isEqualTo(9.99);
+    assertThat(Calls['ttq.track'][0].params.contents[0].quantity).isEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.currency).isEqualTo("CAD");
+    assertThat(Calls['ttq.track'][0].params.value).isEqualTo(7.77);
+
+    assertApi('gtmOnSuccess').wasCalled();
+- name: EnhancedEcommerce
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: true,
+      ecommerce: {
+        detail: {
+          products: [{
+            name: 'tee shirt',
+            id: 'abc123',
+            price: '9.99',
+            brand: 'mybrand',
+            category: 'apparel',
+            variant: 'blue'
+           }]
+         }
+      }
+    };
+
+    runCode(mockData);
+
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.contents.length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.contents[0].content_id).isEqualTo("abc123");
+    assertThat(Calls['ttq.track'][0].params.contents[0].content_type).isEqualTo("product");
+    assertThat(Calls['ttq.track'][0].params.contents[0].content_name).isEqualTo("tee shirt");
+    assertThat(Calls['ttq.track'][0].params.contents[0].content_category).isEqualTo("apparel");
+    assertThat(Calls['ttq.track'][0].params.contents[0].brand).isEqualTo("mybrand");
+    assertThat(Calls['ttq.track'][0].params.contents[0].price).isEqualTo(9.99);
+    assertThat(Calls['ttq.track'][0].params.contents[0].quantity).isEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.currency).isEqualTo("USD");
+    assertThat(Calls['ttq.track'][0].params.value).isEqualTo(9.99);
+
+    assertApi('gtmOnSuccess').wasCalled();
 setup: "const log = require('logToConsole');\n\nconst LogsError = [];\nconst LogsWarn\
   \ = []; \nconst Calls = {};\n\nmock('logToConsole', function() {\n  if (arguments.length\
   \ > 0 && arguments[0].substring(0, 7) == '[ERROR]') {\n    LogsError.push(arguments[0]);\n\
@@ -1187,7 +1295,9 @@ setup: "const log = require('logToConsole');\n\nconst LogsError = [];\nconst Log
   \  \n  if (fnName === 'ttq.identify') {\n    call.params = arguments[1];\n  } else\
   \ if (fnName === 'ttq.track') {\n    call.eventName = arguments[1];\n    call.params\
   \ = arguments[2];\n  }\n});\n\nmock('copyFromWindow', function(name) {\n  // Assume\
-  \ base code always exists.\n  return {};\n});"
+  \ base code always exists.\n  return {};\n});\n\nmock('copyFromDataLayer', function(name)\
+  \ {\n  if (name == \"ecommerce\") {\n    return mockData.ecommerce;\n  }\n  \n \
+  \ return {};\n});"
 
 
 ___NOTES___
