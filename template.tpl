@@ -271,6 +271,21 @@ ___TEMPLATE_PARAMETERS___
         ]
       },
       {
+        "type": "TEXT",
+        "name": "ecomm_currency",
+        "displayName": "Currency",
+        "simpleValueType": true,
+        "valueHint": "USD",
+        "help": "If you haven\u0027t added the currency to the e-commerce data layer, add the current code here. Note: Adding the code will replace the \u0027currency code\u0027 or \u0027currency\u0027 field from your data layer.",
+        "enablingConditions": [
+          {
+            "paramName": "enhance_ecomm",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
         "type": "RADIO",
         "name": "single_multi_product",
         "displayName": "Manually Input Single / Multiple Products from Data Layer",
@@ -531,7 +546,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
  * limitations under the License.
  */
 
-const version = "0_1_20";
+const version = "0_1_21";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
@@ -572,7 +587,7 @@ const getConfigHash = (data) => {
   var email = 0;
   if (data.email) email += 1;
   else if (data.sha256_email) email += 2;
-
+  
   var phone = 0;
   if (data.phone) phone += 1;
   else if (data.sha256_phone) phone += 2;
@@ -595,7 +610,7 @@ const getEnhancedEcommerceData = (data, ecommerce) => {
   if (!ecommerce) {
     return null;
   }
-
+  
   if (data.event == "ViewContent" && ecommerce.detail && ecommerce.detail.products) {
     return ecommerce.detail.products;
   } else if (data.event == "AddToCart" && ecommerce.add && ecommerce.add.products) {
@@ -624,11 +639,11 @@ const getItemCategories = (item) => {
   if (item.item_category3) categories.push(item.item_category3);
   if (item.item_category4) categories.push(item.item_category4);
   if (item.item_category5) categories.push(item.item_category5);
-
+  
   if (categories.length > 0) {
     return categories.join(',');
   }
-
+  
   return null;
 };
 
@@ -637,7 +652,7 @@ const getEcommerceData = (data, ecommerce) => {
   var currency = "USD"; // default value
   var contents = [];
 
-  /*
+  /* 
     Standard Ecommerce Support. For more details on Ecommerce Data Structure
     https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type=gtm
     We will need to check for standard ecommerce events if Enhanced Ecommerce doesnt work
@@ -671,7 +686,7 @@ const getEcommerceData = (data, ecommerce) => {
     log("1a. Standard Ecommerce - Unable to detect any Data Layers");
   }
 
-  /*
+  /* 
     Enhanced Ecommerce Support. Fore more details on Enhanced Ecommerce Data Structure
     https://developers.google.com/analytics/devguides/collection/ua/gtm/enhanced-ecommerce#details
     ViewContent = detail
@@ -706,14 +721,15 @@ const getEcommerceData = (data, ecommerce) => {
   } else if (data.ga_ecomm == "enhance_ecomm") {
     log("1b. Enhanced Ecommerce - Unable to detect any ecommerce data layers");
   }
-
+  
   if (ecommerce) {
-    if (ecommerce.currencyCode) {
+    if (data.ecomm_currency) 
+      currency = data.ecomm_currency;
+    else if (ecommerce.currencyCode)
       currency = ecommerce.currencyCode;
-    } else if (ecommerce.currency) {
+    else if (ecommerce.currency)
       currency = ecommerce.currency;
-    }
-
+    
     if (ecommerce.value) {
       value = ecommerce.value;
     } else if (
@@ -794,7 +810,7 @@ const main = () => {
 
   // Advanced Matching and sending TT events
   var userData = {};
-
+  
   if (data.hash == "hashed") {
     // Send hashed data
     if (data.sha256_email) userData.sha256_email = data.sha256_email;
@@ -1101,7 +1117,7 @@ scenarios:
     \ 'abc123',\n};\nrunCode(mockData);\n\nassertThat(Calls['ttq.identify'].length).isStrictlyEqualTo(1);\n\
     assertThat(Calls['ttq.identify'][0].params).isEqualTo({\n  \"external_id\": \"\
     abc\"\n});\n\nassertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);\nassertThat(Calls['ttq.track'][0].params.gtm_version).isEqualTo(\"\
-    0_1_20:0010\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
+    0_1_21:0010\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
     product\");\nassertThat(Calls['ttq.track'][0].params.content_id).isEqualTo(\"\
     abc123\");\n\nassertApi('gtmOnSuccess').wasCalled();"
 - name: MissingPixelCode
@@ -1255,6 +1271,7 @@ scenarios:
       event: 'CompletePayment',
       pixel_code: 'my_pixel_code',
       enhance_ecomm: true,
+      ecomm_currency: 'CNY',
       ecommerce: {
         detail: {
           products: [{
@@ -1280,7 +1297,7 @@ scenarios:
     assertThat(Calls['ttq.track'][0].params.contents[0].brand).isEqualTo("mybrand");
     assertThat(Calls['ttq.track'][0].params.contents[0].price).isEqualTo(9.99);
     assertThat(Calls['ttq.track'][0].params.contents[0].quantity).isEqualTo(1);
-    assertThat(Calls['ttq.track'][0].params.currency).isEqualTo("USD");
+    assertThat(Calls['ttq.track'][0].params.currency).isEqualTo("CNY");
     assertThat(Calls['ttq.track'][0].params.value).isEqualTo(9.99);
 
     assertApi('gtmOnSuccess').wasCalled();
