@@ -1,6 +1,10 @@
 homepage: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 documentation: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 versions:
+   - sha: 9e3946854fc4dc9d3e2b3cab526c1981a280dd93
+     changeNotes:
+      Version 0.1.21
+      Add optional currency field to replace currency in ecommerce datalayer
    - sha: 4ed8cbc2e957c7a9dd702d82045b21391351a3a9
      changeNotes:
       Version 0.1.20
