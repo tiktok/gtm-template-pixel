@@ -4,6 +4,10 @@
 
 The Google Tag Manager Client Side Template is created to speed up the set up of TikTok Events in Google Tag Manager without the need of writing a line of code. This doc will bring you through the downloading and installation of the template into your Google Tag Manager workspace.
 
+
+For general questions about TikTok pixel, please submit a ticket [here](https://ads.tiktok.com/athena/requester/boards/1705151646989743?identify_key=6a1e079024806640c5e1e695d13db80949525168a052299b4970f9c99cb5ac78).
+
+
 ## Table of Contents
 
 1. [Install the TikTok GTM Client Side Template](#download)
