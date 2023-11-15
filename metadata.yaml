@@ -1,6 +1,10 @@
 homepage: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 documentation: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 versions:
+   - sha: 2015f9157664bb8ed0dfe415519a76d3839ad55d
+     changeNotes:
+      Version 0.1.22
+      Add Additional Object Properties
    - sha: 9e3946854fc4dc9d3e2b3cab526c1981a280dd93
      changeNotes:
       Version 0.1.21
