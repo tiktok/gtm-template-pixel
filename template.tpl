@@ -44,11 +44,7 @@ ___TEMPLATE_PARAMETERS___
         "name": "pixel_code",
         "displayName": "Pixel ID",
         "simpleValueType": true,
-        "valueValidators": [
-          {
-            "type": "NON_EMPTY"
-          }
-        ],
+        "valueValidators": [],
         "help": "You can find your Pixel ID in Events Manager",
         "valueHint": "CD9079RC77U0N3GBV16Y"
       },
@@ -585,7 +581,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
  * limitations under the License.
  */
 
-const version = "0_1_22";
+const version = "0_1_23";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
@@ -890,11 +886,18 @@ const main = () => {
     parameters,
     data.event_id
   );
-
-  callInWindow("ttq.track", data.event, parameters, {
-    event_id: data.event_id,
-    pixel_code: data.pixel_code,
-  });
+  
+  if (data.pixel_code) {
+    callInWindow("ttq.track", data.event, parameters, {
+      event_id: data.event_id,
+      pixel_code: data.pixel_code
+    });
+  } else {
+    callInWindow("ttq.track", data.event, parameters, {
+      event_id: data.event_id
+    });
+  }
+  
 };
 
 const validate = (data) => {
@@ -902,9 +905,6 @@ const validate = (data) => {
   const warnings = [];
 
   // errors
-  if (typeof data.pixel_code === "undefined" || data.pixel_code.trim() === "") {
-    errors.push("data.pixel_code not found");
-  }
   if (!checkExistence("ttq")) {
     errors.push("ttq not found");
   }
@@ -1173,9 +1173,10 @@ scenarios:
     \ 'abc123',\n};\nrunCode(mockData);\n\nassertThat(Calls['ttq.identify'].length).isStrictlyEqualTo(1);\n\
     assertThat(Calls['ttq.identify'][0].params).isEqualTo({\n  \"external_id\": \"\
     abc\"\n});\n\nassertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);\nassertThat(Calls['ttq.track'][0].params.gtm_version).isEqualTo(\"\
-    0_1_22:0010\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
+    0_1_23:0010\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
     product\");\nassertThat(Calls['ttq.track'][0].params.content_id).isEqualTo(\"\
-    abc123\");\n\nassertApi('gtmOnSuccess').wasCalled();"
+    abc123\");\nassertThat(Calls['ttq.track'][0].pixel.pixel_code).isEqualTo(\"my_pixel_code\"\
+    );\n\nassertApi('gtmOnSuccess').wasCalled();"
 - name: MissingPixelCode
   code: |-
     const mockData = {
@@ -1183,8 +1184,8 @@ scenarios:
     };
     runCode(mockData);
 
-    assertThat(LogsError.length).isStrictlyEqualTo(1);
-    assertThat(LogsError).contains("[ERROR] data.pixel_code not found");
+    assertThat(LogsError.length).isStrictlyEqualTo(0);
+    assertThat(Calls['ttq.track'][0].pixel.pixel_code).isEqualTo(undefined);
 - name: InvalidPII
   code: "const mockData = {\n  event: 'CompletePayment',\n  pixel_code: 'my_pixel_code',\n\
     \  \n  email: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',\n\
@@ -1384,10 +1385,10 @@ setup: "const log = require('logToConsole');\n\nconst LogsError = [];\nconst Log
   \ || [];\n  const call = {};\n  call.arguments = arguments;\n  Calls[fnName].push(call);\n\
   \  \n  if (fnName === 'ttq.identify') {\n    call.params = arguments[1];\n  } else\
   \ if (fnName === 'ttq.track') {\n    call.eventName = arguments[1];\n    call.params\
-  \ = arguments[2];\n  }\n});\n\nmock('copyFromWindow', function(name) {\n  // Assume\
-  \ base code always exists.\n  return {};\n});\n\nmock('copyFromDataLayer', function(name)\
-  \ {\n  if (name == \"ecommerce\") {\n    return mockData.ecommerce;\n  }\n  \n \
-  \ return {};\n});"
+  \ = arguments[2];\n    call.pixel = arguments[3];\n  }\n});\n\nmock('copyFromWindow',\
+  \ function(name) {\n  // Assume base code always exists.\n  return {};\n});\n\n\
+  mock('copyFromDataLayer', function(name) {\n  if (name == \"ecommerce\") {\n   \
+  \ return mockData.ecommerce;\n  }\n  \n  return {};\n});"
 
 
 ___NOTES___
