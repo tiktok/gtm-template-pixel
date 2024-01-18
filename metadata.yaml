@@ -1,8 +1,8 @@
 homepage: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 documentation: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 versions:
-  - sha: 078f5d7f808bb5cd7a24b5c4fa7c4adc2f7dcc8c
-    changeNotes:
+   - sha: 078f5d7f808bb5cd7a24b5c4fa7c4adc2f7dcc8c
+     changeNotes:
       Version 0.1.23
       Make pixel_code optional
    - sha: 2015f9157664bb8ed0dfe415519a76d3839ad55d
