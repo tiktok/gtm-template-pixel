@@ -4,7 +4,7 @@ versions:
    - sha: cfe618d563a596ca92bc2fe1002332ea8a752064
      changeNotes:
       Version 0.2.01
-      Release version v2, support passing parameters through API, optimize the configuration UI.
+      Support parsing data layer GA4 recommended events. Optimize template UI.
    - sha: 078f5d7f808bb5cd7a24b5c4fa7c4adc2f7dcc8c
      changeNotes:
       Version 0.1.23
