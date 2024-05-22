@@ -51,7 +51,7 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "SELECT",
         "name": "event",
-        "displayName": "Trigger Event",
+        "displayName": "Event Name",
         "macrosInSelect": true,
         "selectItems": [
           {
@@ -112,410 +112,438 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "simpleValueType": true,
-        "help": "TikTok supports 14 standard events. You may refer to our \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\"\u003edocumentation\u003c/a\u003e and choose a suitable event to tag."
-      }
-    ]
-  },
-  {
-    "type": "GROUP",
-    "name": "Section 2 - Advanced Matching Configurations",
-    "displayName": "Advanced Matching Configurations",
-    "groupStyle": "NO_ZIPPY",
-    "subParams": [
-      {
-        "type": "RADIO",
-        "name": "hash",
-        "displayName": "Hashed / Non-Hashed AM Parameters",
-        "radioItems": [
-          {
-            "value": "hashed",
-            "displayValue": "SHA256 AM Parameters"
-          },
-          {
-            "value": "non-hashed",
-            "displayValue": "Plain AM Parameters",
-            "help": "TikTok Pixel will hash plain email and phone for you"
-          }
-        ],
-        "simpleValueType": true,
-        "enablingConditions": []
-      },
-      {
-        "type": "TEXT",
-        "name": "email",
-        "displayName": "Email",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "hash",
-            "paramValue": "non-hashed",
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "phone",
-        "displayName": "Phone",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "hash",
-            "paramValue": "non-hashed",
-            "type": "EQUALS"
-          }
-        ],
-        "help": "If the country code is 86, then do not include country code (example: 13800000000). Otherwise, include country code with + and remove any other characters (spaces, \u0027-\u0027) between numbers (example for US: +12133734253)."
-      },
-      {
-        "type": "TEXT",
-        "name": "external_id",
-        "displayName": "External ID",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "hash",
-            "paramValue": "non-hashed",
-            "type": "EQUALS"
-          }
-        ],
-        "help": "Any unique identifier on the advertiser\u0027s side, such as loyalty membership ID, user ID, or external cookie ID."
-      },
-      {
-        "type": "TEXT",
-        "name": "sha256_email",
-        "displayName": "SHA256 Hashed Email",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "hash",
-            "paramValue": "hashed",
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "sha256_phone",
-        "displayName": "SHA256 Hashed Phone",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "hash",
-            "paramValue": "hashed",
-            "type": "EQUALS"
-          }
-        ],
-        "help": "If the country code is 86, then do not include country code (example: 13800000000). Otherwise, include country code with + and remove any other characters (spaces, \u0027-\u0027) between numbers (example for US: +12133734253)."
-      },
-      {
-        "type": "TEXT",
-        "name": "sha256_external_id",
-        "displayName": "SHA256 Hashed External ID",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "hash",
-            "paramValue": "hashed",
-            "type": "EQUALS"
-          }
-        ],
-        "help": "Any unique identifier on the advertiser\u0027s side, such as loyalty membership ID, user ID, or external cookie ID."
+        "help": "TikTok supports 14 standard events. You may refer to our \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\" target\u003d\"_blank\"\u003edocumentation\u003c/a\u003e and choose a suitable event to tag.",
+        "defaultValue": "{{Event}}"
       }
     ],
-    "help": "Advance matching parameters are hashed and then shared with TikTok to help attribute more conversions to your ads and improve ad retargeting"
+    "help": "\u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?id\u003d1799004006287425\" target\u003d\"_blank\"\u003eLearn more\u003c/a\u003e about using TikTok Pixel with Google Tag Manager."
   },
   {
     "type": "GROUP",
-    "name": "Section 3 - Object Properties",
-    "displayName": "Object Properties",
+    "name": "Section 3 - Parameter Override",
+    "displayName": "Parameter Override",
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
       {
         "type": "LABEL",
-        "name": "Object Properties Description",
-        "displayName": "Configure and send \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\"\u003eadditional parameters\u003c/a\u003e to TikTok for to improve Ad performance and unlock Ad features.\n\u003cbr /\u003e\n\u003cbr /\u003e"
+        "name": "Parameter Override Description",
+        "displayName": "\u003ca target\u003d\"_blank\" href\u003d\"https://business-api.tiktok.com/portal/docs?id\u003d1799004110681154#item-link-How%20to%20set%20up%20deduplication\"\u003eLearn more\u003c/a\u003e about how to manually configure event parameters with \"Parameter Override\"."
       },
       {
-        "type": "CHECKBOX",
-        "name": "enhance_ecomm",
-        "checkboxText": "Use Google Analytics E-commerce Data Layers (Recommended)",
-        "simpleValueType": true,
-        "help": "If you have Google\u0027s \u003ca href\u003d\"https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type\u003dgtm#implementation\"\u003eEnhanced E-Commerce\u003c/a\u003e or \u003ca href\u003d\"https://support.google.com/tagmanager/answer/6107169?hl\u003den#standard-ecommerce\"\u003e Standard E-Commerce\u003c/a\u003e Data Layers set up to collect information about the shopping behavior of your users. TikTok will automatically collect these data as parameters to help you improve your ad performance."
-      },
-      {
-        "type": "RADIO",
-        "name": "ga_ecomm",
-        "displayName": "Google Analytics E-commerce Data Layers",
-        "radioItems": [
+        "type": "GROUP",
+        "name": "Advanced Matching Configurations",
+        "displayName": "Advanced Matching Configurations",
+        "groupStyle": "NO_ZIPPY",
+        "subParams": [
           {
-            "value": "enhance_ecomm",
-            "displayValue": "Enhanced Ecommerce"
+            "type": "RADIO",
+            "name": "hash",
+            "displayName": "Hashed / Non-Hashed AM Parameters",
+            "radioItems": [
+              {
+                "value": "hashed",
+                "displayValue": "SHA256 AM Parameters"
+              },
+              {
+                "value": "non-hashed",
+                "displayValue": "Plain AM Parameters",
+                "help": "TikTok Pixel will hash plain email and phone for you"
+              }
+            ],
+            "simpleValueType": true,
+            "help": "Tell us if your AM parameters have been hashed."
           },
           {
-            "value": "ecomm",
-            "displayValue": "Standard Ecommerce"
-          }
-        ],
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": true,
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "ecomm_currency",
-        "displayName": "Currency",
-        "simpleValueType": true,
-        "valueHint": "USD",
-        "help": "If you haven\u0027t added the currency to the e-commerce data layer, add the current code here. Note: Adding the code will replace the \u0027currency code\u0027 or \u0027currency\u0027 field from your data layer.",
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": true,
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "RADIO",
-        "name": "single_multi_product",
-        "displayName": "Manually Input Single / Multiple Products from Data Layer",
-        "radioItems": [
-          {
-            "value": "single",
-            "displayValue": "Single Content"
+            "type": "TEXT",
+            "name": "email",
+            "displayName": "Email",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "hash",
+                "paramValue": "non-hashed",
+                "type": "EQUALS"
+              }
+            ]
           },
           {
-            "value": "multiple",
-            "displayValue": "Multiple Contents",
-            "help": "Send a list of contents as a JSON string. \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON\"\u003eLearn more about JSON\u003c/a\u003e"
+            "type": "TEXT",
+            "name": "phone",
+            "displayName": "Phone",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "hash",
+                "paramValue": "non-hashed",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "If the country code is 86, then do not include country code (example: 13800000000). Otherwise, include country code with + and remove any other characters (spaces, \u0027-\u0027) between numbers (example for US: +12133734253)."
           },
           {
-            "value": "empty",
-            "displayValue": "No Contents"
-          }
-        ],
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "contents",
-        "displayName": "contents",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "single_multi_product",
-            "paramValue": "multiple",
-            "type": "EQUALS"
-          }
-        ],
-        "help": "Please make sure \"contents\" is \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\"\u003ea list of valid content objects\u003c/a\u003e or encoded as \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON\"\u003ea valid JSON string\u003c/a\u003e.",
-        "valueHint": "[{\"content_id\": \"abc\", \"price\": 10, \"quantity\": 1}]"
-      },
-      {
-        "type": "TEXT",
-        "name": "content_id",
-        "displayName": "content_id",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "single_multi_product",
-            "paramValue": "single",
-            "type": "EQUALS"
-          }
-        ],
-        "help": "Recommended: Unique ID of the item, either SKU ID or item group ID"
-      },
-      {
-        "type": "SELECT",
-        "name": "content_type",
-        "displayName": "content_type",
-        "macrosInSelect": false,
-        "selectItems": [
-          {
-            "value": "product",
-            "displayValue": "product"
+            "type": "TEXT",
+            "name": "external_id",
+            "displayName": "External ID",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "hash",
+                "paramValue": "non-hashed",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Any unique identifier on the advertiser\u0027s side, such as loyalty membership ID, user ID, or external cookie ID."
           },
           {
-            "value": "product_group",
-            "displayValue": "product_group"
+            "type": "TEXT",
+            "name": "sha256_email",
+            "displayName": "SHA256 Hashed Email",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "hash",
+                "paramValue": "hashed",
+                "type": "EQUALS"
+              }
+            ]
+          },
+          {
+            "type": "TEXT",
+            "name": "sha256_phone",
+            "displayName": "SHA256 Hashed Phone",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "hash",
+                "paramValue": "hashed",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "If the country code is 86, then do not include country code (example: 13800000000). Otherwise, include country code with + and remove any other characters (spaces, \u0027-\u0027) between numbers (example for US: +12133734253)."
+          },
+          {
+            "type": "TEXT",
+            "name": "sha256_external_id",
+            "displayName": "SHA256 Hashed External ID",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "hash",
+                "paramValue": "hashed",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Any unique identifier on the advertiser\u0027s side, such as loyalty membership ID, user ID, or external cookie ID."
           }
         ],
-        "simpleValueType": true,
-        "enablingConditions": [
+        "help": "Advance matching parameters are hashed and then shared with TikTok to help attribute more conversions to your ads and improve ad retargeting. \u003cbr\u003e \u003ca target\u003d\"_blank\" href\u003d\"https://business-api.tiktok.com/portal/docs?id\u003d1799004110681154#item-link-User%20data\"\u003eLearn more\u003c/a\u003e about how to format Advanced Matching parameters."
+      },
+      {
+        "type": "GROUP",
+        "name": "Properties",
+        "displayName": "Properties (e.g. product data)",
+        "groupStyle": "NO_ZIPPY",
+        "subParams": [
           {
-            "paramName": "single_multi_product",
-            "paramValue": "single",
-            "type": "EQUALS"
+            "type": "CHECKBOX",
+            "name": "enhance_ecomm",
+            "checkboxText": "Use Google Analytics E-commerce Data Layers (Recommended)",
+            "simpleValueType": true,
+            "help": "If you have Google\u0027s \u003ca href\u003d\"https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type\u003dgtm#implementation\" target\u003d\"_blank\"\u003eEnhanced E-Commerce\u003c/a\u003e or \u003ca href\u003d\"https://support.google.com/tagmanager/answer/6107169?hl\u003den#standard-ecommerce\" target\u003d\"_blank\"\u003e Standard E-Commerce\u003c/a\u003e Data Layers set up to collect information about the shopping behavior of your users. TikTok will automatically collect these data as parameters to help you improve your ad performance.",
+            "defaultValue": true
+          },
+          {
+            "type": "RADIO",
+            "name": "ga_ecomm",
+            "displayName": "Google Analytics E-commerce Data Layers",
+            "radioItems": [
+              {
+                "value": "ecomm",
+                "displayValue": "Standard Ecommerce"
+              },
+              {
+                "value": "enhance_ecomm",
+                "displayValue": "Enhanced Ecommerce"
+              }
+            ],
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": true,
+                "type": "EQUALS"
+              }
+            ],
+            "defaultValue": "ecomm"
+          },
+          {
+            "type": "TEXT",
+            "name": "ecomm_currency",
+            "displayName": "Currency",
+            "simpleValueType": true,
+            "valueHint": "USD",
+            "help": "If you haven\u0027t added the currency to the e-commerce data layer, add the current code here. Note: Adding the code will replace the \u0027currency code\u0027 or \u0027currency\u0027 field from your data layer.",
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": true,
+                "type": "EQUALS"
+              }
+            ]
+          },
+          {
+            "type": "RADIO",
+            "name": "single_multi_product",
+            "displayName": "Manually Input Single / Multiple Products from Data Layer",
+            "radioItems": [
+              {
+                "value": "single",
+                "displayValue": "Single Content"
+              },
+              {
+                "value": "multiple",
+                "displayValue": "Multiple Contents",
+                "help": "Send a list of contents as a JSON string. \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON\" target\u003d\"_blank\"\u003eLearn more about JSON\u003c/a\u003e"
+              },
+              {
+                "value": "empty",
+                "displayValue": "No Contents"
+              }
+            ],
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ]
+          },
+          {
+            "type": "TEXT",
+            "name": "contents",
+            "displayName": "contents",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "single_multi_product",
+                "paramValue": "multiple",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Please make sure \"contents\" is \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?id\u003d1799004110681154#item-link-contents%20parameters\" target\u003d\"_blank\"\u003ea list of valid content objects\u003c/a\u003e or encoded as \u003ca href\u003d\"https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON\" target\u003d\"_blank\"\u003ea valid JSON string\u003c/a\u003e.",
+            "valueHint": "[{\"content_id\": \"abc\", \"price\": 10, \"quantity\": 1}]"
+          },
+          {
+            "type": "TEXT",
+            "name": "content_id",
+            "displayName": "content_id",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "single_multi_product",
+                "paramValue": "single",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Recommended: Unique ID of the item, either SKU ID or item group ID"
+          },
+          {
+            "type": "SELECT",
+            "name": "content_type",
+            "displayName": "content_type",
+            "macrosInSelect": false,
+            "selectItems": [
+              {
+                "value": "product",
+                "displayValue": "product"
+              },
+              {
+                "value": "product_group",
+                "displayValue": "product_group"
+              }
+            ],
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "single_multi_product",
+                "paramValue": "single",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Recommended: Select \"product\" if your content_id is SKU ID, or select \"product_group\" if your content_id is item group ID",
+            "notSetText": ""
+          },
+          {
+            "type": "TEXT",
+            "name": "content_name",
+            "displayName": "content_name",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "single_multi_product",
+                "paramValue": "single",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Recommended: Title of your product or page"
+          },
+          {
+            "type": "TEXT",
+            "name": "content_category",
+            "displayName": "content_category",
+            "simpleValueType": true,
+            "help": "Recommended: Category of the product or page",
+            "enablingConditions": [
+              {
+                "paramName": "single_multi_product",
+                "paramValue": "single",
+                "type": "EQUALS"
+              }
+            ]
+          },
+          {
+            "type": "TEXT",
+            "name": "price",
+            "displayName": "price",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "single_multi_product",
+                "paramValue": "single",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Recommended: Price of this item"
+          },
+          {
+            "type": "TEXT",
+            "name": "quantity",
+            "displayName": "quantity",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "single_multi_product",
+                "paramValue": "single",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Recommended: Quantity of this item"
+          },
+          {
+            "type": "TEXT",
+            "name": "value",
+            "displayName": "value",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Recommended: Total value of the order"
+          },
+          {
+            "type": "TEXT",
+            "name": "currency",
+            "displayName": "currency",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Recommended: ISO 4217 code. Examples: \"EUR\", \"USD\", \"JPY\". See \u003ca href\u003d\"https://ads.tiktok.com/help/article/about-parameters?lang\u003den\" target\u003d\"_blank\"\u003ehere\u003c/a\u003e for a list of currencies supported."
+          },
+          {
+            "type": "TEXT",
+            "name": "description",
+            "displayName": "description",
+            "simpleValueType": true,
+            "help": "Recommended: Description of the product or page",
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ]
+          },
+          {
+            "type": "TEXT",
+            "name": "brand",
+            "displayName": "brand",
+            "simpleValueType": true,
+            "help": "Recommended: Brand name of the product",
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ]
+          },
+          {
+            "type": "TEXT",
+            "name": "query",
+            "displayName": "query",
+            "simpleValueType": true,
+            "help": "Recommended for Search events: The text string that was searched for. For instance, a person searches for a product on your website, you can forward the keyword being searched here.",
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ]
+          },
+          {
+            "type": "TEXT",
+            "name": "status",
+            "displayName": "status",
+            "simpleValueType": true,
+            "help": "Optional: Status of an order, item, or service.",
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ]
           }
         ],
-        "help": "Recommended: Select \"product\" if your content_id is SKU ID, or select \"product_group\" if your content_id is item group ID",
-        "notSetText": ""
+        "help": "Configure and send \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?id\u003d1799004110681154#item-link-Product%20data\" target\u003d\"_blank\"\u003eadditional parameters\u003c/a\u003e to TikTok for to improve Ad performance and unlock Ad features."
       },
       {
-        "type": "TEXT",
-        "name": "content_name",
-        "displayName": "content_name",
-        "simpleValueType": true,
-        "enablingConditions": [
+        "type": "GROUP",
+        "name": "De-duplication Configurations",
+        "displayName": "De-duplication Configurations",
+        "groupStyle": "NO_ZIPPY",
+        "subParams": [
           {
-            "paramName": "single_multi_product",
-            "paramValue": "single",
-            "type": "EQUALS"
+            "type": "TEXT",
+            "name": "event_id",
+            "displayName": "Event ID",
+            "simpleValueType": true
           }
         ],
-        "help": "Recommended: Title of your product or page"
-      },
-      {
-        "type": "TEXT",
-        "name": "content_category",
-        "displayName": "content_category",
-        "simpleValueType": true,
-        "help": "Recommended: Category of the product or page",
-        "enablingConditions": [
-          {
-            "paramName": "single_multi_product",
-            "paramValue": "single",
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "description",
-        "displayName": "description",
-        "simpleValueType": true,
-        "help": "Recommended: Description of the product or page",
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "brand",
-        "displayName": "brand",
-        "simpleValueType": true,
-        "help": "Recommended: Brand name of the product",
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "price",
-        "displayName": "price",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "single_multi_product",
-            "paramValue": "single",
-            "type": "EQUALS"
-          }
-        ],
-        "help": "Recommended: Price of this item"
-      },
-      {
-        "type": "TEXT",
-        "name": "quantity",
-        "displayName": "quantity",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "single_multi_product",
-            "paramValue": "single",
-            "type": "EQUALS"
-          }
-        ],
-        "help": "Recommended: Quantity of this item"
-      },
-      {
-        "type": "TEXT",
-        "name": "currency",
-        "displayName": "currency",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ],
-        "help": "Recommended: ISO 4217 code. Examples: \"EUR\", \"USD\", \"JPY\". See \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\"\u003ehere \u003c/a\u003efor a list of currencies supported."
-      },
-      {
-        "type": "TEXT",
-        "name": "value",
-        "displayName": "value",
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ],
-        "help": "Recommended: Total value of the order"
-      },
-      {
-        "type": "TEXT",
-        "name": "query",
-        "displayName": "query",
-        "simpleValueType": true,
-        "help": "Recommended for Search events: The text string that was searched for. For instance, a person searches for a product on your website, you can forward the keyword being searched here.",
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "TEXT",
-        "name": "status",
-        "displayName": "status",
-        "simpleValueType": true,
-        "help": "Optional: Status of an order, item, or service.",
-        "enablingConditions": [
-          {
-            "paramName": "enhance_ecomm",
-            "paramValue": false,
-            "type": "EQUALS"
-          }
-        ]
+        "help": "If you use both TikTok Pixel template and Events API template to send events, you can set up Event ID to deduplicate the two sources. \u003ca target\u003d\"_blank\" href\u003d\"https://business-api.tiktok.com/portal/docs?id\u003d1799004097478658#item-link-How%20to%20set%20up%20deduplication\"\u003eLearn more\u003c/a\u003e about how to set up deduplication."
       }
     ]
   },
   {
     "type": "GROUP",
-    "name": "Section 4 - Additional Object Properties",
-    "displayName": "Additional Object Properties",
+    "name": "Section 2 - Additional Properties",
+    "displayName": "Additional Properties",
     "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
       {
         "type": "LABEL",
         "name": "Description",
-        "displayName": "You may configure and send more custom object parameters to TikTok to unlock additional Ad features targeted at specific verticals (i.e. Travel)"
+        "displayName": "You may configure and send more custom parameters to TikTok to unlock additional Ad features targeted at specific verticals (i.e. Travel)"
       },
       {
         "type": "PARAM_TABLE",
@@ -544,21 +572,6 @@ ___TEMPLATE_PARAMETERS___
         ]
       }
     ]
-  },
-  {
-    "type": "GROUP",
-    "name": "Section 5 - De-duplication Configurations",
-    "displayName": "De-duplication Configurations",
-    "groupStyle": "ZIPPY_CLOSED",
-    "subParams": [
-      {
-        "type": "TEXT",
-        "name": "event_id",
-        "displayName": "Event ID",
-        "simpleValueType": true,
-        "help": "Deduplication with event_id  is required if you use this template together with Events API. See \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10012410\"\u003ehere \u003c/a\u003e for instructions on deduplication"
-      }
-    ]
   }
 ]
 
@@ -581,7 +594,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
  * limitations under the License.
  */
 
-const version = "0_1_23";
+const version = "0_2_01";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
@@ -592,6 +605,11 @@ const Object = require("Object");
 const JSON = require("JSON");
 
 const ecommerce = copyFromDataLayer("ecommerce");
+const eventModel = copyFromDataLayer("eventModel");
+const userDataFromDataLayer = copyFromDataLayer("user_data");
+const ttContents = copyFromDataLayer('tt_contents') || (eventModel && eventModel.tt_contents);
+const ttContentType = copyFromDataLayer('tt_content_type') || (eventModel && eventModel.tt_content_type);
+const ttExternalId = copyFromDataLayer('tt_external_id') || (eventModel && eventModel.tt_external_id);
 
 const ValidEvents = {
   ViewContent: 1,
@@ -610,6 +628,18 @@ const ValidEvents = {
   Subscribe: 1,
 };
 
+const TTEventMap = {
+  'add_payment_info': 'AddPaymentInfo',
+  'add_to_cart': 'AddToCart',
+  'add_to_wishlist': 'AddToWishlist',
+  'begin_checkout': 'InitiateCheckout',
+  'page_view': 'Pageview',
+  'purchase': 'CompletePayment',
+  'search': 'Search',
+  'sign_up': 'CompleteRegistration',
+  'view_item': 'ViewContent',
+};
+
 const checkExistence = (key) => {
   return typeof copyFromWindow(key) !== "undefined";
 };
@@ -619,17 +649,10 @@ const looksLikeSHA256 = (s) => {
 };
 
 const getConfigHash = (data) => {
-  var email = 0;
-  if (data.email) email += 1;
-  else if (data.sha256_email) email += 2;
-
-  var phone = 0;
-  if (data.phone) phone += 1;
-  else if (data.sha256_phone) phone += 2;
-
-  var external_id = 0;
-  if (data.external_id) external_id += 1;
-  else if (data.sha256_external_id) external_id += 2;
+  // What API is used. 0: None, 1: Tag Manager, 2: Google Tag, 3: Both
+  var apiVersion = 0;
+  if (ecommerce || userDataFromDataLayer) apiVersion += 1;
+  if (eventModel && (eventModel.items || eventModel.value || eventModel.currency || eventModel.user_data)) apiVersion += 2;
 
   var contents = 0;
   if (data.enhance_ecomm == false && data.single_multi_product == "empty") contents = 1;
@@ -638,7 +661,7 @@ const getConfigHash = (data) => {
   else if (data.enhance_ecomm == true && data.ga_ecomm == "enhance_ecomm") contents = 4;
   else if (data.enhance_ecomm == true && data.ga_ecomm == "ecomm") contents = 5;
 
-  return '' + email + phone + external_id + contents;
+  return '' + apiVersion + contents;
 };
 
 const getEnhancedEcommerceData = (data, ecommerce) => {
@@ -692,9 +715,10 @@ const getEcommerceData = (data, ecommerce) => {
     https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type=gtm
     We will need to check for standard ecommerce events if Enhanced Ecommerce doesnt work
   */
-  if (ecommerce && ecommerce.items) {
+  const secData = (ecommerce && ecommerce.items) || (eventModel && eventModel.items) || ttContents;
+  if (secData) {
     log("1a. Standard Ecommerce - Data layers detected");
-    ecommerce.items.map(function (ed) {
+    secData.map(function (ed) {
       // Form the TikTok Parameter Object
       var content = {};
       if (ed.item_id) content.content_id = ed.item_id;
@@ -709,7 +733,7 @@ const getEcommerceData = (data, ecommerce) => {
       } else {
         content.quantity = 1;
       }
-      content.content_type = "product";
+      content.content_type = ttContentType || "product";
       contents.push(content);
       // Calulate the total value shown
       if (ed.price) {
@@ -745,7 +769,7 @@ const getEcommerceData = (data, ecommerce) => {
       } else {
         content.quantity = 1;
       }
-      content.content_type = "product";
+      content.content_type = ttContentType || "product";
       contents.push(content);
       // Calulate the total value shown
       if (ed.price) {
@@ -757,23 +781,26 @@ const getEcommerceData = (data, ecommerce) => {
     log("1b. Enhanced Ecommerce - Unable to detect any ecommerce data layers");
   }
 
-  if (ecommerce) {
-    if (data.ecomm_currency)
-      currency = data.ecomm_currency;
-    else if (ecommerce.currencyCode)
-      currency = ecommerce.currencyCode;
-    else if (ecommerce.currency)
-      currency = ecommerce.currency;
+  if (data.ecomm_currency)
+    currency = data.ecomm_currency;
+  else if (ecommerce && ecommerce.currencyCode)
+    currency = ecommerce.currencyCode;
+  else if (ecommerce && ecommerce.currency)
+    currency = ecommerce.currency;
+  else if (eventModel && eventModel.currency)
+    currency = eventModel.currency;
 
-    if (ecommerce.value) {
-      value = ecommerce.value;
-    } else if (
-      ecommerce.purchase &&
-      ecommerce.purchase.actionField &&
-      ecommerce.purchase.actionField.revenue
-    ) {
-      value = ecommerce.purchase.actionField.revenue;
-    }
+  if (ecommerce && ecommerce.value) {
+    value = ecommerce.value;
+  } else if (
+    ecommerce &&
+    ecommerce.purchase &&
+    ecommerce.purchase.actionField &&
+    ecommerce.purchase.actionField.revenue
+  ) {
+    value = ecommerce.purchase.actionField.revenue;
+  } else if (eventModel && eventModel.value) {
+    value = eventModel.value;
   }
 
   return {
@@ -783,11 +810,46 @@ const getEcommerceData = (data, ecommerce) => {
   };
 };
 
+const isHashed = (val) => {
+  return val && val.match("^[A-Fa-f0-9]{64}$") != null;
+};
+
+const getUserDataFromDataLayer = () => {
+  var userData = {};
+  const email = (userDataFromDataLayer && (userDataFromDataLayer.email_address || userDataFromDataLayer.sha256_email_address)) ||
+    (eventModel && eventModel.user_data && (eventModel.user_data.email_address || eventModel.user_data.sha256_email_address));
+  if (email) {
+    if (isHashed(email)) {
+      userData.sha256_email = email;
+    } else {
+      userData.email = email;
+    }
+  }
+
+  const phone = (userDataFromDataLayer && (userDataFromDataLayer.phone_number || userDataFromDataLayer.sha256_phone_number)) ||
+    (eventModel && eventModel.user_data && (eventModel.user_data.phone_number || eventModel.user_data.sha256_phone_number));
+  if (phone) {
+    if (isHashed(phone)) {
+      userData.sha256_phone_number = phone;
+    } else {
+      userData.phone_number = phone;
+    }
+  }
+
+  if (ttExternalId) {
+    userData.external_id = ttExternalId;
+  }
+
+  return userData;
+};
+
 const main = () => {
   // Forming the passed in parameters
   var parameters = {
     gtm_version: version + ':' + getConfigHash(data),
+    event_trigger_source: 'GoogleTagManagerClient',
   };
+  const ttEvent = TTEventMap[data.event] || data.event;
 
   // Check if enhance ecomm is enabled.
   if (data.enhance_ecomm == true) {
@@ -801,7 +863,7 @@ const main = () => {
     if (data.single_multi_product == "single") {
       // Single Content
       if (data.content_id) parameters.content_id = data.content_id;
-      if (data.content_type) parameters.content_type = data.content_type;
+      if (data.content_type || ttContentType) parameters.content_type = data.content_type || ttContentType;
       if (data.content_name) parameters.content_name = data.content_name;
       if (data.price) parameters.price = makeNumber(data.price);
       if (data.quantity) parameters.quantity = makeNumber(data.quantity);
@@ -854,7 +916,7 @@ const main = () => {
   }
 
   // Advanced Matching and sending TT events
-  var userData = {};
+  var userData = getUserDataFromDataLayer();
 
   if (data.hash == "hashed") {
     // Send hashed data
@@ -881,23 +943,22 @@ const main = () => {
 
   log(
     "3. Base code found, sending ",
-    data.event,
+    ttEvent,
     "event with",
     parameters,
     data.event_id
   );
-  
+
   if (data.pixel_code) {
-    callInWindow("ttq.track", data.event, parameters, {
+    callInWindow("ttq.track", ttEvent, parameters, {
       event_id: data.event_id,
       pixel_code: data.pixel_code
     });
   } else {
-    callInWindow("ttq.track", data.event, parameters, {
+    callInWindow("ttq.track", ttEvent, parameters, {
       event_id: data.event_id
     });
   }
-  
 };
 
 const validate = (data) => {
@@ -936,7 +997,7 @@ const validate = (data) => {
       warnings.push("data.sha256_phone is not a SHA256 hash");
   }
 
-  if (ValidEvents[data.event] === undefined) {
+  if (TTEventMap[data.event] == undefined && ValidEvents[data.event] === undefined) {
     warnings.push('data.event "' + data.event + '" is not a valid event');
   }
 
@@ -1138,19 +1199,7 @@ ___WEB_PERMISSIONS___
           "key": "allowedKeys",
           "value": {
             "type": 1,
-            "string": "specific"
-          }
-        },
-        {
-          "key": "keyPatterns",
-          "value": {
-            "type": 2,
-            "listItem": [
-              {
-                "type": 1,
-                "string": "ecommerce"
-              }
-            ]
+            "string": "any"
           }
         }
       ]
@@ -1167,15 +1216,17 @@ ___TESTS___
 
 scenarios:
 - name: Basic
-  code: "const mockData = {\n  event: 'ViewContent',\n  pixel_code: 'my_pixel_code',\n\
+  code: "const mockData = {\n  event: 'view_item',\n  pixel_code: 'my_pixel_code',\n\
     \  \n  advance_matching: true,\n  hash: \"non-hashed\",\n  external_id: '   abc\
     \   ',\n  \n  single_multi_product: 'single',\n  content_type: 'product',\n  content_id:\
     \ 'abc123',\n};\nrunCode(mockData);\n\nassertThat(Calls['ttq.identify'].length).isStrictlyEqualTo(1);\n\
     assertThat(Calls['ttq.identify'][0].params).isEqualTo({\n  \"external_id\": \"\
     abc\"\n});\n\nassertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);\nassertThat(Calls['ttq.track'][0].params.gtm_version).isEqualTo(\"\
-    0_1_23:0010\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
+    0_2_01:00\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
     product\");\nassertThat(Calls['ttq.track'][0].params.content_id).isEqualTo(\"\
-    abc123\");\nassertThat(Calls['ttq.track'][0].pixel.pixel_code).isEqualTo(\"my_pixel_code\"\
+    abc123\");\nassertThat(Calls['ttq.track'][0].params.event_trigger_source).isEqualTo(\"\
+    GoogleTagManagerClient\");\nassertThat(Calls['ttq.track'][0].pixel.pixel_code).isEqualTo(\"\
+    my_pixel_code\");\nassertThat(Calls['ttq.track'][0].eventName).isEqualTo(\"ViewContent\"\
     );\n\nassertApi('gtmOnSuccess').wasCalled();"
 - name: MissingPixelCode
   code: |-
@@ -1388,7 +1439,7 @@ setup: "const log = require('logToConsole');\n\nconst LogsError = [];\nconst Log
   \ = arguments[2];\n    call.pixel = arguments[3];\n  }\n});\n\nmock('copyFromWindow',\
   \ function(name) {\n  // Assume base code always exists.\n  return {};\n});\n\n\
   mock('copyFromDataLayer', function(name) {\n  if (name == \"ecommerce\") {\n   \
-  \ return mockData.ecommerce;\n  }\n  \n  return {};\n});"
+  \ return mockData.ecommerce;\n  }\n  \n  return undefined;\n});"
 
 
 ___NOTES___
