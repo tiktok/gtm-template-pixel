@@ -1,3 +1,5 @@
+![image](https://github.com/tiktok/gtm-template-eapi/assets/131811467/8e1864d9-8af1-48a1-a33d-e6be99bb24ee)
+
 # TikTok Pixel Template
 
 ## About TikTok Pixel
