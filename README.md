@@ -10,7 +10,7 @@ TikTok Pixel is a piece of javascript code that you can place on your website th
 
 You can use Google Tag Manger (GTM) to manage TikTok Pixel code installation and use this template to help configure pixel events to trigger on your website events. [Learn more](https://business-api.tiktok.com/portal/docs?id=1799004006287425)  
   * You need to first install the TikTok Base Code before using this template. See [Base Code and Template Installation](#base-code-and-template-installation).
-  * This template parses Google Analytics 4 (GA4) events received by GTM web container, converts them to TikTok events and fires the Pixel events.
+  * This template parses Google Analytics 4 (GA4) events received by GTM web container, converts them to TikTok events and fires the Pixel events. The template also allows you to manually configure events and parameters to send to TikTok.
     * If you use TikTok Event Builder (Recommended) to configure Pixel events firing, then you don't need to use this template. Learn more about [Event Builder](https://ads.tiktok.com/help/article/about-event-builder-2).
 <br><br>
 
@@ -25,7 +25,7 @@ We recommend setting up Pixel x GTM Integration using TikTok Events Manager's in
 ### Install manually
 1. Install Pixel Base Code tag
 
-* Create a <i>Custom HTML</i> tag in your GTM Web container.*
+* Create a <i>Custom HTML</i> tag in your GTM Web container.
 * Copy the Pixel Base Code from TikTok Events Manager and paste it in the HTML field, and set the trigger to <i>All Pages</i>.
   
   ![image](https://github.com/tiktok/gtm-template-pixel/assets/143729589/404b3a98-e73d-49a9-98d7-41c3975865ca)
