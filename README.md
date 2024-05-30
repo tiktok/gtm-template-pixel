@@ -53,7 +53,7 @@ Use this template if you plan to use GTM data layer or want to manually configur
 
 ## Verify Pixel x GTM Integration
 See <i>Verify TikTok Pixel Setup</i> section in this [developer document](https://business-api.tiktok.com/portal/docs?id=1799004129683458). <br>
-If you have any feature requests / issues, please file a request in GitHub [here](https://github.com/tiktok/gtm-template-pixel/issues).
+If you have any feature requests or issues, please file a request in GitHub [here](https://github.com/tiktok/gtm-template-pixel/issues).
 <br><br>
 
 ## Change Logs
