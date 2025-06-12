@@ -231,7 +231,10 @@ const getEcommerceData = (data, ecommerce) => {
 };
 
 const isHashed = (val) => {
-  return val && val.match("^[A-Fa-f0-9]{64}$") != null;
+  if(typeof val === 'object' && typeof val[0] === 'string'){
+     val = val[0];
+  }
+  return val && typeof val === 'string' && val.match("^[A-Fa-f0-9]{64}$") != null;
 };
 
 const getUserDataFromDataLayer = () => {
