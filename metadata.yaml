@@ -1,6 +1,10 @@
 homepage: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 documentation: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 versions:
+   - sha: a589b60cf2a811368205cd799c717618cd069265
+     changeNotes:
+      Version 0.2.02
+      Support parsing transaction_id and add order_id in template UI.
    - sha: cfe618d563a596ca92bc2fe1002332ea8a752064
      changeNotes:
       Version 0.2.01
