@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-const version = "0_2_01";
+const version = "0_2_02";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
@@ -30,6 +30,7 @@ const userDataFromDataLayer = copyFromDataLayer("user_data");
 const ttContents = copyFromDataLayer('tt_contents') || (eventModel && eventModel.tt_contents);
 const ttContentType = copyFromDataLayer('tt_content_type') || (eventModel && eventModel.tt_content_type);
 const ttExternalId = copyFromDataLayer('tt_external_id') || (eventModel && eventModel.tt_external_id);
+const ttOrderId = copyFromDataLayer('tt_order_id') || (eventModel && eventModel.tt_order_id);
 
 const ValidEvents = {
   ViewContent: 1,
@@ -279,6 +280,14 @@ const main = () => {
     if (ecomData.contents && ecomData.contents.length > 0) {
       parameters.contents = ecomData.contents;
     }
+    const order_id = (ecommerce && ecommerce.transaction_id) ||
+      (ecommerce && ecommerce.purchase && ecommerce.purchase.actionField && ecommerce.purchase.actionField.id) ||
+      (eventModel && eventModel.transaction_id) ||
+      ttOrderId ||
+      data.order_id;
+    if (order_id) {
+      parameters.order_id = order_id;
+    }
   } else {
     if (data.single_multi_product == "single") {
       // Single Content
@@ -300,6 +309,7 @@ const main = () => {
       if (data.description) parameters.description = data.description;
       if (data.query) parameters.query = data.query;
       if (data.status) parameters.status = data.status;
+      if (data.order_id) parameters.order_id = data.order_id;
     } else if (data.single_multi_product == "multiple") {
       // Multiple Content
       if (data.contents) {
@@ -315,6 +325,7 @@ const main = () => {
       if (data.description) parameters.description = data.description;
       if (data.query) parameters.query = data.query;
       if (data.status) parameters.status = data.status;
+      if (data.order_id) parameters.order_id = data.order_id;
     } else if (data.single_multi_product == "empty") {
       // No Content
       if (data.currency) parameters.currency = data.currency;
@@ -322,6 +333,7 @@ const main = () => {
       if (data.description) parameters.description = data.description;
       if (data.query) parameters.query = data.query;
       if (data.status) parameters.status = data.status;
+      if (data.order_id) parameters.order_id = data.order_id;
     }
   }
 
