@@ -513,6 +513,20 @@ ___TEMPLATE_PARAMETERS___
                 "type": "EQUALS"
               }
             ]
+          },
+          {
+            "type": "TEXT",
+            "name": "order_id",
+            "displayName": "order_id",
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Recommended: Unique ID of this order"
           }
         ],
         "help": "Configure and send \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?id\u003d1799004110681154#item-link-Product%20data\" target\u003d\"_blank\"\u003eadditional parameters\u003c/a\u003e to TikTok for to improve Ad performance and unlock Ad features."
@@ -594,7 +608,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
  * limitations under the License.
  */
 
-const version = "0_2_01";
+const version = "0_2_02";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
@@ -610,6 +624,7 @@ const userDataFromDataLayer = copyFromDataLayer("user_data");
 const ttContents = copyFromDataLayer('tt_contents') || (eventModel && eventModel.tt_contents);
 const ttContentType = copyFromDataLayer('tt_content_type') || (eventModel && eventModel.tt_content_type);
 const ttExternalId = copyFromDataLayer('tt_external_id') || (eventModel && eventModel.tt_external_id);
+const ttOrderId = copyFromDataLayer('tt_order_id') || (eventModel && eventModel.tt_order_id);
 
 const ValidEvents = {
   ViewContent: 1,
@@ -859,6 +874,14 @@ const main = () => {
     if (ecomData.contents && ecomData.contents.length > 0) {
       parameters.contents = ecomData.contents;
     }
+    const order_id = (ecommerce && ecommerce.transaction_id) ||
+      (ecommerce && ecommerce.purchase && ecommerce.purchase.actionField && ecommerce.purchase.actionField.id) ||
+      (eventModel && eventModel.transaction_id) ||
+      ttOrderId ||
+      data.order_id;
+    if (order_id) {
+      parameters.order_id = order_id;
+    }
   } else {
     if (data.single_multi_product == "single") {
       // Single Content
@@ -880,6 +903,7 @@ const main = () => {
       if (data.description) parameters.description = data.description;
       if (data.query) parameters.query = data.query;
       if (data.status) parameters.status = data.status;
+      if (data.order_id) parameters.order_id = data.order_id;
     } else if (data.single_multi_product == "multiple") {
       // Multiple Content
       if (data.contents) {
@@ -895,6 +919,7 @@ const main = () => {
       if (data.description) parameters.description = data.description;
       if (data.query) parameters.query = data.query;
       if (data.status) parameters.status = data.status;
+      if (data.order_id) parameters.order_id = data.order_id;
     } else if (data.single_multi_product == "empty") {
       // No Content
       if (data.currency) parameters.currency = data.currency;
@@ -902,6 +927,7 @@ const main = () => {
       if (data.description) parameters.description = data.description;
       if (data.query) parameters.query = data.query;
       if (data.status) parameters.status = data.status;
+      if (data.order_id) parameters.order_id = data.order_id;
     }
   }
 
@@ -1222,7 +1248,7 @@ scenarios:
     \ 'abc123',\n};\nrunCode(mockData);\n\nassertThat(Calls['ttq.identify'].length).isStrictlyEqualTo(1);\n\
     assertThat(Calls['ttq.identify'][0].params).isEqualTo({\n  \"external_id\": \"\
     abc\"\n});\n\nassertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);\nassertThat(Calls['ttq.track'][0].params.gtm_version).isEqualTo(\"\
-    0_2_01:00\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
+    0_2_02:00\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
     product\");\nassertThat(Calls['ttq.track'][0].params.content_id).isEqualTo(\"\
     abc123\");\nassertThat(Calls['ttq.track'][0].params.event_trigger_source).isEqualTo(\"\
     GoogleTagManagerClient\");\nassertThat(Calls['ttq.track'][0].pixel.pixel_code).isEqualTo(\"\
@@ -1426,6 +1452,150 @@ scenarios:
     assertThat(Calls['ttq.track'][0].params.value).isEqualTo(9.99);
 
     assertApi('gtmOnSuccess').wasCalled();
+- name: Standard Ecommerce - order_id
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: true,
+      ecommerce: {
+        transaction_id: 'ORD-GA4-001',
+        currency: 'USD',
+        value: 199.8,
+        items: [
+          {
+            item_id: 'SKU-001',
+            item_name: 'Product A',
+            price: 99.9,
+            quantity: 2,
+          }
+        ]
+      }
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.order_id).isEqualTo('ORD-GA4-001');
+    assertThat(Calls['ttq.track'][0].params.value).isEqualTo(199.8);
+    assertThat(Calls['ttq.track'][0].params.currency).isEqualTo('USD');
+    assertThat(Calls['ttq.track'][0].eventName).isEqualTo('CompletePayment');
+- name: Standard Ecommerce - no order_id
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: true,
+      ecommerce: {
+        currency: 'USD',
+        value: 99.9,
+        items: [
+          {
+            item_id: 'SKU-001',
+            item_name: 'Product A',
+            price: 99.9,
+            quantity: 1,
+          }
+        ]
+      }
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.order_id).isUndefined();
+- name: Enhanced Ecommerce - order_id
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: true,
+      ecommerce: {
+        currencyCode: 'USD',
+        purchase: {
+          actionField: {
+            id: 'ORD-UA-001',
+            revenue: 99.9,
+          },
+          products: [
+            {
+              id: 'SKU-001',
+              name: 'Product A',
+              price: '99.9',
+              quantity: 1,
+            }
+          ]
+        }
+      }
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.order_id).isEqualTo('ORD-UA-001');
+- name: SingleProduct - order_id
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: false,
+      single_multi_product: 'single',
+      content_id: 'SKU-001',
+      content_type: 'product',
+      content_name: 'Product A',
+      price: '99.9',
+      quantity: '1',
+      currency: 'USD',
+      value: '99.9',
+      order_id: 'ORD-CUSTOM-SINGLE',
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.order_id).isEqualTo('ORD-CUSTOM-SINGLE');
+    assertThat(Calls['ttq.track'][0].params.content_id).isEqualTo('SKU-001');
+    assertThat(Calls['ttq.track'][0].params.value).isEqualTo(99.9);
+- name: MultipleProducts - order_id
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: false,
+      single_multi_product: 'multiple',
+      contents: '[{"content_id":"SKU-001","price":99.9,"quantity":1},{"content_id":"SKU-002","price":49.9,"quantity":2}]',
+      currency: 'USD',
+      value: '199.7',
+      order_id: 'ORD-CUSTOM-MULTI',
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.order_id).isEqualTo('ORD-CUSTOM-MULTI');
+    assertThat(Calls['ttq.track'][0].params.contents.length).isStrictlyEqualTo(2);
+- name: Template UI - order_id
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: false,
+      single_multi_product: 'empty',
+      currency: 'USD',
+      value: '99.9',
+      order_id: 'ORD-CUSTOM-EMPTY',
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.order_id).isEqualTo('ORD-CUSTOM-EMPTY');
 setup: "const log = require('logToConsole');\n\nconst LogsError = [];\nconst LogsWarn\
   \ = []; \nconst Calls = {};\n\nmock('logToConsole', function() {\n  if (arguments.length\
   \ > 0 && arguments[0].substring(0, 7) == '[ERROR]') {\n    LogsError.push(arguments[0]);\n\
