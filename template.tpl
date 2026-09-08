@@ -657,7 +657,7 @@ const ttContentType = copyFromDataLayer('tt_content_type') || (eventModel && eve
 const ttExternalId = copyFromDataLayer('tt_external_id') || (eventModel && eventModel.tt_external_id);
 const ttOrderId = copyFromDataLayer('tt_order_id') || (eventModel && eventModel.tt_order_id);
 const ttCustomerType = copyFromDataLayer('tt_customer_type') || (eventModel && eventModel.tt_customer_type);
-// 新增：GA4 原生 key。GTM 路径在 ecommerce 内，gtag 路径在 eventModel
+// Added: GA4 native key. The GTM path reads from ecommerce, the gtag path reads from eventModel
 const ga4CustomerType = (ecommerce && ecommerce.customer_type) ||
   (eventModel && eventModel.customer_type) ||
   copyFromDataLayer('customer_type');
