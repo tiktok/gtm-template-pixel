@@ -12,7 +12,6 @@ ___INFO___
   "type": "TAG",
   "id": "cvt_temp_public_id",
   "version": 1,
-  "securityGroups": [],
   "displayName": "TikTok Pixel",
   "categories": [
     "ADVERTISING",
@@ -26,7 +25,8 @@ ___INFO___
   "description": "Install TikTok Pixel easily to your site without the need to write a line of code.",
   "containerContexts": [
     "WEB"
-  ]
+  ],
+  "securityGroups": []
 }
 
 
@@ -112,7 +112,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "simpleValueType": true,
-        "help": "TikTok supports 14 standard events. You may refer to our \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\" target\u003d\"_blank\"\u003edocumentation\u003c/a\u003e and choose a suitable event to tag.",
+        "help": "TikTok supports 18 standard events. You may refer to our \u003ca href\u003d\"https://ads.tiktok.com/help/article?aid\u003d10028\" target\u003d\"_blank\"\u003edocumentation\u003c/a\u003e and choose a suitable event to tag.",
         "defaultValue": "{{Event}}"
       }
     ],
@@ -290,6 +290,21 @@ ___TEMPLATE_PARAMETERS___
                 "type": "EQUALS"
               }
             ]
+          },
+          {
+            "type": "TEXT",
+            "name": "ecomm_customer_type",
+            "displayName": "customer_type",
+            "simpleValueType": true,
+            "help": "If you haven\u0027t added customer_type to your data layer, add it here; leave it empty if you aren\u0027t sure whether the customer is new or returning. Note: a customer_type found in your data layer, or set under Additional Properties, takes precedence over this field\n— avoid configuring it in more than one place.",
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": true,
+                "type": "EQUALS"
+              }
+            ],
+            "valueHint": "new/returning"
           },
           {
             "type": "RADIO",
@@ -527,6 +542,21 @@ ___TEMPLATE_PARAMETERS___
               }
             ],
             "help": "Recommended: Unique ID of this order"
+          },
+          {
+            "type": "TEXT",
+            "name": "customer_type",
+            "displayName": "customer_type",
+            "simpleValueType": true,
+            "help": "A categorical label indicating the customer segment associated with the conversion event.",
+            "enablingConditions": [
+              {
+                "paramName": "enhance_ecomm",
+                "paramValue": false,
+                "type": "EQUALS"
+              }
+            ],
+            "valueHint": "new/returning"
           }
         ],
         "help": "Configure and send \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?id\u003d1799004110681154#item-link-Product%20data\" target\u003d\"_blank\"\u003eadditional parameters\u003c/a\u003e to TikTok for to improve Ad performance and unlock Ad features."
@@ -608,12 +638,13 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
  * limitations under the License.
  */
 
-const version = "0_2_02";
+const version = "0_2_03";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
 const copyFromDataLayer = require("copyFromDataLayer");
 const makeNumber = require("makeNumber");
+const makeString = require('makeString');
 const callInWindow = require("callInWindow");
 const Object = require("Object");
 const JSON = require("JSON");
@@ -625,6 +656,12 @@ const ttContents = copyFromDataLayer('tt_contents') || (eventModel && eventModel
 const ttContentType = copyFromDataLayer('tt_content_type') || (eventModel && eventModel.tt_content_type);
 const ttExternalId = copyFromDataLayer('tt_external_id') || (eventModel && eventModel.tt_external_id);
 const ttOrderId = copyFromDataLayer('tt_order_id') || (eventModel && eventModel.tt_order_id);
+const ttCustomerType = copyFromDataLayer('tt_customer_type') || (eventModel && eventModel.tt_customer_type);
+// Added: GA4 native key. The GTM path reads from ecommerce, the gtag path reads from eventModel
+const ga4CustomerType = (ecommerce && ecommerce.customer_type) ||
+  (eventModel && eventModel.customer_type) ||
+  copyFromDataLayer('customer_type');
+
 
 const ValidEvents = {
   ViewContent: 1,
@@ -641,6 +678,13 @@ const ValidEvents = {
   SubmitForm: 1,
   CompleteRegistration: 1,
   Subscribe: 1,
+  CustomizeProduct: 1,
+  FindLocation: 1,
+  Schedule: 1,
+  ApplicationApproval: 1,
+  StartTrial: 1,
+  SubmitApplication: 1,
+  Purchase: 1,
 };
 
 const TTEventMap = {
@@ -677,6 +721,47 @@ const getConfigHash = (data) => {
   else if (data.enhance_ecomm == true && data.ga_ecomm == "ecomm") contents = 5;
 
   return '' + apiVersion + contents;
+};
+
+const CUSTOMER_TYPE_ALIASES = {
+  // -> new
+  'new': 'new',
+  'new_customer': 'new',
+  'newcustomer': 'new',
+  'new_user': 'new',
+  'new_visitor': 'new',
+  'first_time': 'new',
+  'firsttime': 'new',
+  'first_time_buyer': 'new',
+  'first_time_customer': 'new',
+  'first_purchase': 'new',
+  'first_order': 'new',
+  // -> returning
+  'returning': 'returning',
+  'return': 'returning',
+  'returning_customer': 'returning',
+  'returning_user': 'returning',
+  'returning_visitor': 'returning',
+  'repeat': 'returning',
+  'repeat_customer': 'returning',
+  'repeated': 'returning',
+  'repeated_customer': 'returning',
+  'existing': 'returning',
+  'existing_customer': 'returning',
+  'existing_user': 'returning',
+  'recurring': 'returning',
+  'recurring_customer': 'returning',
+  'loyal': 'returning',
+  'loyal_customer': 'returning'
+};
+
+const normalizeCustomerType = (value) => {
+  if (!value) return undefined;
+  let normalized = makeString(value).trim().toLowerCase();
+  // Normalize separators: "New Customer" / "new-customer" -> "new_customer"
+  normalized = normalized.split(' ').join('_').split('-').join('_');
+  const mapped = CUSTOMER_TYPE_ALIASES[normalized];
+  return (mapped === 'new' || mapped === 'returning') ? mapped : undefined;
 };
 
 const getEnhancedEcommerceData = (data, ecommerce) => {
@@ -865,7 +950,6 @@ const main = () => {
     event_trigger_source: 'GoogleTagManagerClient',
   };
   const ttEvent = TTEventMap[data.event] || data.event;
-
   // Check if enhance ecomm is enabled.
   if (data.enhance_ecomm == true) {
     const ecomData = getEcommerceData(data, ecommerce);
@@ -928,6 +1012,18 @@ const main = () => {
       if (data.query) parameters.query = data.query;
       if (data.status) parameters.status = data.status;
       if (data.order_id) parameters.order_id = data.order_id;
+    }
+  }
+  
+
+  const rawCustomerType = ttCustomerType || ga4CustomerType || data.customer_type || data.ecomm_customer_type;
+  if (rawCustomerType) {
+    const customerType = normalizeCustomerType(rawCustomerType);
+    if (customerType) {
+      parameters.customer_type = customerType;
+    } else {
+      log('[WARN] customer_type "' + makeString(rawCustomerType) +
+          '" is not a supported value, expected "new" or "returning". Parameter dropped.');
     }
   }
 
@@ -1025,6 +1121,16 @@ const validate = (data) => {
 
   if (TTEventMap[data.event] == undefined && ValidEvents[data.event] === undefined) {
     warnings.push('data.event "' + data.event + '" is not a valid event');
+  }
+
+  if (data.customer_type && normalizeCustomerType(data.customer_type) === undefined) {
+    warnings.push('data.customer_type "' + makeString(data.customer_type) +
+      '" is not a supported value, expected "new" or "returning"; it will not be sent');
+  } 
+  
+  if (data.ecomm_customer_type && normalizeCustomerType(data.ecomm_customer_type) === undefined) {
+    warnings.push('data.ecomm_customer_type "' + makeString(data.ecomm_customer_type) +
+      '" is not a supported value, expected "new" or "returning"; it will not be sent');
   }
 
   for (const msg of warnings) {
@@ -1248,7 +1354,7 @@ scenarios:
     \ 'abc123',\n};\nrunCode(mockData);\n\nassertThat(Calls['ttq.identify'].length).isStrictlyEqualTo(1);\n\
     assertThat(Calls['ttq.identify'][0].params).isEqualTo({\n  \"external_id\": \"\
     abc\"\n});\n\nassertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);\nassertThat(Calls['ttq.track'][0].params.gtm_version).isEqualTo(\"\
-    0_2_02:00\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
+    0_2_03:00\");\nassertThat(Calls['ttq.track'][0].params.content_type).isEqualTo(\"\
     product\");\nassertThat(Calls['ttq.track'][0].params.content_id).isEqualTo(\"\
     abc123\");\nassertThat(Calls['ttq.track'][0].params.event_trigger_source).isEqualTo(\"\
     GoogleTagManagerClient\");\nassertThat(Calls['ttq.track'][0].pixel.pixel_code).isEqualTo(\"\
@@ -1596,6 +1702,149 @@ scenarios:
     assertApi('gtmOnSuccess').wasCalled();
     assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
     assertThat(Calls['ttq.track'][0].params.order_id).isEqualTo('ORD-CUSTOM-EMPTY');
+- name: Standard Ecommerce - customer_type
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: true,
+      ecommerce: {
+        transaction_id: 'ORD-001',
+        currency: 'USD',
+        value: 99.9,
+        customer_type: 'new',
+        items: [
+          {
+            item_id: 'SKU-001',
+            item_name: 'Product A',
+            price: 99.9,
+            quantity: 1,
+          }
+        ]
+      }
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+    assertThat(Calls['ttq.track'][0].params.customer_type).isEqualTo('new');
+    assertThat(LogsWarn.length).isStrictlyEqualTo(0);
+- name: Enhanced Ecommerce - customer_type
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: true,
+      ecommerce: {
+        currencyCode: 'USD',
+        customer_type: 'returning',
+        purchase: {
+          actionField: {
+            id: 'ORD-UA-001',
+            revenue: 99.9,
+          },
+          products: [
+            {
+              id: 'SKU-001',
+              price: '99.9',
+              quantity: 1,
+            }
+          ]
+        }
+      }
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'][0].params.customer_type).isEqualTo('returning');
+    assertThat(Calls['ttq.track'][0].params.order_id).isEqualTo('ORD-UA-001');
+- name: gtag eventModel - customer_type
+  code: |-
+    const mockData = {
+      transaction_id: "T_12345",
+        value: 72.05,
+        tax: 3.60,
+        shipping: 5.99,
+        currency: "USD",
+        coupon: "SUMMER_SALE",
+        customer_type: "new",
+        items: [
+         {
+          item_id: "SKU_12345",
+          item_name: "Stan and Friends Tee"
+         }
+       ]
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'][0].params.customer_type).isEqualTo('new');
+- name: Top level data layer - customer_type
+  code: |-
+    const mockData = {
+          event: 'CompletePayment',
+          pixel_code: 'my_pixel_code',
+         customer_type: 'new',
+          ecommerce: {
+            currency: 'USD',
+            value: 99.9,
+            items: [
+              {
+                item_id: 'SKU-001',
+                price: 99.9,
+                quantity: 1,
+              }
+            ]
+          }
+        };
+
+        runCode(mockData);
+
+        assertApi('gtmOnSuccess').wasCalled();
+        assertThat(Calls['ttq.track'][0].params.customer_type).isEqualTo('new');
+- name: customer_type is normalized (casing and whitespace)
+  code: |-
+    const mockData = {
+      event: 'CompletePayment',
+      pixel_code: 'my_pixel_code',
+      enhance_ecomm: false,
+      single_multi_product: 'empty',
+      customer_type: '  NEW  ',
+    };
+
+    runCode(mockData);
+
+    assertApi('gtmOnSuccess').wasCalled();
+    assertThat(Calls['ttq.track'][0].params.customer_type).isEqualTo('new');
+    assertThat(LogsWarn.length).isStrictlyEqualTo(0);
+- name: Invalid customer_type from the data layer is dropped
+  code: |-
+    const mockData = {
+          event: 'CompletePayment',
+          pixel_code: 'my_pixel_code',
+          enhance_ecomm: true,
+          ecommerce: {
+            currency: 'USD',
+            value: 99.9,
+            customer_type: 'vip',
+            items: [
+              {
+                item_id: 'SKU-001',
+                price: 99.9,
+                quantity: 1,
+              }
+            ]
+          }
+        };
+
+        runCode(mockData);
+
+        assertApi('gtmOnSuccess').wasCalled();
+        assertThat(Calls['ttq.track'].length).isStrictlyEqualTo(1);
+        assertThat(Calls['ttq.track'][0].params.customer_type).isUndefined();
 setup: "const log = require('logToConsole');\n\nconst LogsError = [];\nconst LogsWarn\
   \ = []; \nconst Calls = {};\n\nmock('logToConsole', function() {\n  if (arguments.length\
   \ > 0 && arguments[0].substring(0, 7) == '[ERROR]') {\n    LogsError.push(arguments[0]);\n\

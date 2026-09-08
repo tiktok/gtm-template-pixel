@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-const version = "0_2_02";
+const version = "0_2_03";
 
 const log = require("logToConsole");
 const copyFromWindow = require("copyFromWindow");
 const copyFromDataLayer = require("copyFromDataLayer");
 const makeNumber = require("makeNumber");
+const makeString = require('makeString');
 const callInWindow = require("callInWindow");
 const Object = require("Object");
 const JSON = require("JSON");
@@ -31,6 +32,12 @@ const ttContents = copyFromDataLayer('tt_contents') || (eventModel && eventModel
 const ttContentType = copyFromDataLayer('tt_content_type') || (eventModel && eventModel.tt_content_type);
 const ttExternalId = copyFromDataLayer('tt_external_id') || (eventModel && eventModel.tt_external_id);
 const ttOrderId = copyFromDataLayer('tt_order_id') || (eventModel && eventModel.tt_order_id);
+const ttCustomerType = copyFromDataLayer('tt_customer_type') || (eventModel && eventModel.tt_customer_type);
+// Added: GA4 native key. The GTM path reads from ecommerce, the gtag path reads from eventModel
+const ga4CustomerType = (ecommerce && ecommerce.customer_type) ||
+  (eventModel && eventModel.customer_type) ||
+  copyFromDataLayer('customer_type');
+
 
 const ValidEvents = {
   ViewContent: 1,
@@ -47,6 +54,13 @@ const ValidEvents = {
   SubmitForm: 1,
   CompleteRegistration: 1,
   Subscribe: 1,
+  CustomizeProduct: 1,
+  FindLocation: 1,
+  Schedule: 1,
+  ApplicationApproval: 1,
+  StartTrial: 1,
+  SubmitApplication: 1,
+  Purchase: 1,
 };
 
 const TTEventMap = {
@@ -83,6 +97,47 @@ const getConfigHash = (data) => {
   else if (data.enhance_ecomm == true && data.ga_ecomm == "ecomm") contents = 5;
 
   return '' + apiVersion + contents;
+};
+
+const CUSTOMER_TYPE_ALIASES = {
+  // -> new
+  'new': 'new',
+  'new_customer': 'new',
+  'newcustomer': 'new',
+  'new_user': 'new',
+  'new_visitor': 'new',
+  'first_time': 'new',
+  'firsttime': 'new',
+  'first_time_buyer': 'new',
+  'first_time_customer': 'new',
+  'first_purchase': 'new',
+  'first_order': 'new',
+  // -> returning
+  'returning': 'returning',
+  'return': 'returning',
+  'returning_customer': 'returning',
+  'returning_user': 'returning',
+  'returning_visitor': 'returning',
+  'repeat': 'returning',
+  'repeat_customer': 'returning',
+  'repeated': 'returning',
+  'repeated_customer': 'returning',
+  'existing': 'returning',
+  'existing_customer': 'returning',
+  'existing_user': 'returning',
+  'recurring': 'returning',
+  'recurring_customer': 'returning',
+  'loyal': 'returning',
+  'loyal_customer': 'returning'
+};
+
+const normalizeCustomerType = (value) => {
+  if (!value) return undefined;
+  let normalized = makeString(value).trim().toLowerCase();
+  // Normalize separators: "New Customer" / "new-customer" -> "new_customer"
+  normalized = normalized.split(' ').join('_').split('-').join('_');
+  const mapped = CUSTOMER_TYPE_ALIASES[normalized];
+  return (mapped === 'new' || mapped === 'returning') ? mapped : undefined;
 };
 
 const getEnhancedEcommerceData = (data, ecommerce) => {
@@ -271,7 +326,6 @@ const main = () => {
     event_trigger_source: 'GoogleTagManagerClient',
   };
   const ttEvent = TTEventMap[data.event] || data.event;
-
   // Check if enhance ecomm is enabled.
   if (data.enhance_ecomm == true) {
     const ecomData = getEcommerceData(data, ecommerce);
@@ -334,6 +388,18 @@ const main = () => {
       if (data.query) parameters.query = data.query;
       if (data.status) parameters.status = data.status;
       if (data.order_id) parameters.order_id = data.order_id;
+    }
+  }
+  
+
+  const rawCustomerType = ttCustomerType || ga4CustomerType || data.customer_type || data.ecomm_customer_type;
+  if (rawCustomerType) {
+    const customerType = normalizeCustomerType(rawCustomerType);
+    if (customerType) {
+      parameters.customer_type = customerType;
+    } else {
+      log('[WARN] customer_type "' + makeString(rawCustomerType) +
+          '" is not a supported value, expected "new" or "returning". Parameter dropped.');
     }
   }
 
@@ -431,6 +497,16 @@ const validate = (data) => {
 
   if (TTEventMap[data.event] == undefined && ValidEvents[data.event] === undefined) {
     warnings.push('data.event "' + data.event + '" is not a valid event');
+  }
+
+  if (data.customer_type && normalizeCustomerType(data.customer_type) === undefined) {
+    warnings.push('data.customer_type "' + makeString(data.customer_type) +
+      '" is not a supported value, expected "new" or "returning"; it will not be sent');
+  } 
+  
+  if (data.ecomm_customer_type && normalizeCustomerType(data.ecomm_customer_type) === undefined) {
+    warnings.push('data.ecomm_customer_type "' + makeString(data.ecomm_customer_type) +
+      '" is not a supported value, expected "new" or "returning"; it will not be sent');
   }
 
   for (const msg of warnings) {
