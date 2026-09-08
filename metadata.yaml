@@ -1,7 +1,7 @@
 homepage: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 documentation: "https://ads.tiktok.com/help/article/get-started-google-tag-manager"
 versions:
-   - sha: 17eb9ff8702923f76f9f630162dcdbef26abe1ab
+   - sha: 4f41627a384f15e75cb01e250198875aa81db3d7
      changeNotes:
       Version 0.2.03
       Support parsing customer_type and adding remaining Tiktok standard events.
