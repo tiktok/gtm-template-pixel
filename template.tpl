@@ -758,7 +758,7 @@ const CUSTOMER_TYPE_ALIASES = {
 const normalizeCustomerType = (value) => {
   if (!value) return undefined;
   let normalized = makeString(value).trim().toLowerCase();
-  // 分隔符归一："New Customer" / "new-customer" -> "new_customer"
+  // Normalize separators: "New Customer" / "new-customer" -> "new_customer"
   normalized = normalized.split(' ').join('_').split('-').join('_');
   const mapped = CUSTOMER_TYPE_ALIASES[normalized];
   return (mapped === 'new' || mapped === 'returning') ? mapped : undefined;
